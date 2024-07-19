@@ -1,21 +1,21 @@
 shell: /bin/bash
 commands:
-  - name: git-show
+  git-show:
     command: git show
-  - name: git-root
+  git-root:
     command: git rev-parse --show-toplevel
-  - name: go-files
+  go-files:
     command: find . -name "*.go" -exec ls -l \{\} \;
-  - name: broken
+  broken:
     command: foo bar wibble
-  - name: multiline
+  multiline:
     command: |
       ls -la
       ls
-  - name: compound
-    command: |
-      if [[ -e foo ]]; then
-        echo foo
-      else
-        echo bar
-      fi
+  compound:
+    pre:
+      - git-root
+      - go-files
+    command: echo "Hello world!"
+    post:
+      - git-root

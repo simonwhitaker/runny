@@ -1,7 +1,6 @@
 package main
 
 import (
-	"cmp"
 	"fmt"
 	"os"
 	"os/exec"
@@ -12,18 +11,10 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+type CommandName string
+
 var secondaryColor = color.New(color.FgHiBlack)
 var defaultShell = "/bin/bash"
-
-type Command struct {
-	Name    string `yaml:"name"`
-	Command string `yaml:"command"`
-}
-
-type Config struct {
-	Commands []Command `yaml:"commands"`
-	Shell    string    `yaml:"shell,omitempty"`
-}
 
 func singleLine(command string) string {
 	command = strings.TrimSpace(command)
@@ -35,15 +26,62 @@ func singleLine(command string) string {
 	return strings.Join(trimmedLines, "; ")
 }
 
-func executeCommand(shell, rawCommand string) error {
-	command := strings.TrimSpace(rawCommand)
-	// FIXME: -c is bash-specific, won't work with every shell
-	args := []string{"-c", command}
+type CommandDef struct {
+	Command string        `yaml:"command"`
+	Pre     []CommandName `yaml:"pre"`
+	Post    []CommandName `yaml:"post"`
+}
 
-	cmd := exec.Command(shell, args...)
-	cmd.Stdout = os.Stdout
+type Config struct {
+	Commands map[CommandName]CommandDef `yaml:"commands"`
+	shell    string                     `yaml:"shell"`
+}
 
-	return cmd.Run()
+func (c *Config) GetShell() string {
+	if len(c.shell) > 0 {
+		return c.shell
+	}
+	return defaultShell
+}
+
+func (c *CommandDef) Execute(conf Config) error {
+	// Handle pre-commands
+	for _, name := range c.Pre {
+		// TODO: handle invalid names
+		command := conf.Commands[name]
+		err := command.Execute(conf)
+		if err != nil {
+			return err
+		}
+	}
+
+	// Handle the command
+	command := strings.TrimSpace(c.Command)
+	if len(command) > 0 {
+		// FIXME: -c is bash-specific, won't work with every shell
+		args := []string{"-c", command}
+
+		cmd := exec.Command(conf.GetShell(), args...)
+		cmd.Stdout = os.Stdout
+
+		err := cmd.Run()
+		if err != nil {
+			fmt.Printf("%s %s\n", color.RedString(string(command)), secondaryColor.Sprint(err))
+			return err
+		}
+	}
+
+	// Handle post-commands
+	for _, name := range c.Post {
+		// TODO: handle invalid names
+		command := conf.Commands[name]
+		err := command.Execute(conf)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func main() {
@@ -59,36 +97,28 @@ func main() {
 		panic(err)
 	}
 
-	shell := conf.Shell
-	if len(shell) == 0 {
-		shell = defaultShell
-	}
-
 	// read command line args
 	if len(os.Args) > 1 {
-		cmdName := os.Args[1]
-		found := false
-		for _, c := range conf.Commands {
-			if c.Name == cmdName {
-				err := executeCommand(shell, c.Command)
-				if err != nil {
-					fmt.Printf("%s %s\n", color.RedString(c.Command), secondaryColor.Sprint(err))
-				}
-				found = true
-			}
-		}
-		if !found {
+		name := CommandName(os.Args[1])
+		if command, ok := conf.Commands[name]; ok {
+			command.Execute(conf)
+		} else {
 			color.Red("Command not found")
 		}
 	} else {
 		commands := conf.Commands
-		slices.SortFunc(commands, func(a, b Command) int {
-			return cmp.Compare(a.Name, b.Name)
-		})
-		for _, cmd := range commands {
-			nameColor := color.New(color.Bold)
+		names := make([]CommandName, len(commands))
+		i := 0
+		for key := range commands {
+			names[i] = key
+			i += 1
+		}
 
-			fmt.Printf("%s %s\n", nameColor.Sprint(cmd.Name), secondaryColor.Sprint(singleLine(cmd.Command)))
+		slices.Sort(names)
+
+		for _, name := range names {
+			nameColor := color.New(color.Bold)
+			fmt.Printf("%s %s\n", nameColor.Sprint(name), secondaryColor.Sprint(singleLine(commands[name].Command)))
 		}
 	}
 }
