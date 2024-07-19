@@ -1,0 +1,5 @@
+commands:
+  - name: git-show
+    command: git show
+  - name: git-root
+    command: git rev-parse --show-toplevel
