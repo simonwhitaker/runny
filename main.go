@@ -25,6 +25,16 @@ type Config struct {
 	Shell    string    `yaml:"shell,omitempty"`
 }
 
+func singleLine(command string) string {
+	command = strings.TrimSpace(command)
+	lines := strings.Split(command, "\n")
+	trimmedLines := []string{}
+	for _, line := range lines {
+		trimmedLines = append(trimmedLines, strings.TrimSpace(line))
+	}
+	return strings.Join(trimmedLines, "; ")
+}
+
 func executeCommand(shell, rawCommand string) error {
 	command := strings.TrimSpace(rawCommand)
 	// FIXME: -c is bash-specific, won't work with every shell
@@ -78,7 +88,7 @@ func main() {
 		for _, cmd := range commands {
 			nameColor := color.New(color.Bold)
 
-			fmt.Printf("%s %s\n", nameColor.Sprint(cmd.Name), secondaryColor.Sprint(cmd.Command))
+			fmt.Printf("%s %s\n", nameColor.Sprint(cmd.Name), secondaryColor.Sprint(singleLine(cmd.Command)))
 		}
 	}
 }
