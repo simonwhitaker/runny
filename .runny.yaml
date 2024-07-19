@@ -3,3 +3,5 @@ commands:
     command: git show
   - name: git-root
     command: git rev-parse --show-toplevel
+  - name: go-files
+    command: find . -name *.go -exec ls -l {} ;
