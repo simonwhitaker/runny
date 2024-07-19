@@ -43,11 +43,10 @@ func main() {
 		for _, c := range conf.Commands {
 			if c.Name == cmdName {
 				cmdTokens := strings.Split(c.Command, " ")
-				args := cmdTokens[1:]
-				args = append(args, os.Args[2:]...)
 
-				cmd := exec.Command(cmdTokens[0], args...)
+				cmd := exec.Command(cmdTokens[0], cmdTokens[:1]...)
 				cmd.Stdout = os.Stdout
+
 				err := cmd.Run()
 				if err != nil {
 					fmt.Printf("%s %s\n", color.RedString(c.Command), secondaryColor.Sprint(err))
