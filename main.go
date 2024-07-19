@@ -13,6 +13,7 @@ import (
 )
 
 var secondaryColor = color.New(color.FgHiBlack)
+var defaultShell = "/bin/bash"
 
 type Command struct {
 	Name    string `yaml:"name"`
@@ -21,12 +22,24 @@ type Command struct {
 
 type Config struct {
 	Commands []Command `yaml:"commands"`
+	Shell    string    `yaml:"shell,omitempty"`
+}
+
+func executeCommand(shell, rawCommand string) error {
+	command := strings.TrimSpace(rawCommand)
+	// FIXME: -c is bash-specific, won't work with every shell
+	args := []string{"-c", command}
+
+	cmd := exec.Command(shell, args...)
+	cmd.Stdout = os.Stdout
+
+	return cmd.Run()
 }
 
 func main() {
 	var conf Config
 
-	// read a YAML file from disk
+	// Read .runny.yaml from the current directory
 	yamlFile, err := os.ReadFile(".runny.yaml")
 	if err != nil {
 		panic(err)
@@ -36,18 +49,18 @@ func main() {
 		panic(err)
 	}
 
+	shell := conf.Shell
+	if len(shell) == 0 {
+		shell = defaultShell
+	}
+
 	// read command line args
 	if len(os.Args) > 1 {
 		cmdName := os.Args[1]
 		found := false
 		for _, c := range conf.Commands {
 			if c.Name == cmdName {
-				cmdTokens := strings.Split(c.Command, " ")
-
-				cmd := exec.Command(cmdTokens[0], cmdTokens[:1]...)
-				cmd.Stdout = os.Stdout
-
-				err := cmd.Run()
+				err := executeCommand(shell, c.Command)
 				if err != nil {
 					fmt.Printf("%s %s\n", color.RedString(c.Command), secondaryColor.Sprint(err))
 				}
