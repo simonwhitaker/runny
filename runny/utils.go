@@ -7,14 +7,18 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func commandStringToSingleLine(command string) string {
+func commandStringToSingleLine(command string, maxlength int) string {
 	command = strings.TrimSpace(command)
 	lines := strings.Split(command, "\n")
 	trimmedLines := []string{}
 	for _, line := range lines {
 		trimmedLines = append(trimmedLines, strings.TrimSpace(line))
 	}
-	return strings.Join(trimmedLines, "; ")
+	result := strings.Join(trimmedLines, "; ")
+	if len(result) > maxlength {
+		result = result[:maxlength-3] + "..."
+	}
+	return result
 }
 
 func readConfig() (Config, error) {

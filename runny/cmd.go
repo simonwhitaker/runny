@@ -29,7 +29,7 @@ func showHelp(conf Config) {
 		fmt.Printf("%s%s%s\n",
 			nameColor.Sprint(name),
 			separator,
-			secondaryColor.Sprint(commandStringToSingleLine(commands[name].Command)))
+			secondaryColor.Sprint(commandStringToSingleLine(commands[name].Command, 40)))
 	}
 
 }
