@@ -19,17 +19,19 @@ func showHelp(conf Config) {
 	}
 
 	slices.Sort(names)
+	var separator = " "
+	var maxCommandLength = 60
+	if !term.IsTerminal(int(os.Stdout.Fd())) {
+		separator = "\t"
+		maxCommandLength = 40
+	}
 
 	for _, name := range names {
-		nameColor := color.New(color.Bold)
-		var separator = " "
-		if !term.IsTerminal(int(os.Stdout.Fd())) {
-			separator = "\t"
-		}
-		fmt.Printf("%s%s%s\n",
-			nameColor.Sprint(name),
-			separator,
-			secondaryColor.Sprint(commandStringToSingleLine(commands[name].Command, 40)))
+		var rawCommand = commandStringToSingleLine(commands[name].Command, maxCommandLength)
+
+		fmt.Print(primaryColor.Sprint(name))
+		fmt.Print(separator)
+		fmt.Println(secondaryColor.Sprint(rawCommand))
 	}
 
 }
