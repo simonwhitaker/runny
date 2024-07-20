@@ -1,17 +1,19 @@
 shell: /bin/bash
 commands:
-  git-show:
-    command: git show
   git-root:
     command: git rev-parse --show-toplevel
   go-files:
     command: find . -name "*.go" -exec ls -l \{\} \;
   broken:
+    # A deliberately broken command
     command: foo bar wibble
-  multiline:
+  readme-stats:
     command: |
-      ls -la
-      ls
+      if [[ -e README.md ]]; then
+        wc README.md
+      else
+        echo "Couldn't find README.md"
+      fi
   compound:
     pre:
       - git-root
