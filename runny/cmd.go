@@ -6,6 +6,7 @@ import (
 	"slices"
 
 	"github.com/fatih/color"
+	"golang.org/x/term"
 )
 
 func showHelp(conf Config) {
@@ -21,7 +22,14 @@ func showHelp(conf Config) {
 
 	for _, name := range names {
 		nameColor := color.New(color.Bold)
-		fmt.Printf("%s %s\n", nameColor.Sprint(name), secondaryColor.Sprint(commandStringToSingleLine(commands[name].Command)))
+		var separator = " "
+		if !term.IsTerminal(int(os.Stdout.Fd())) {
+			separator = "\t"
+		}
+		fmt.Printf("%s%s%s\n",
+			nameColor.Sprint(name),
+			separator,
+			secondaryColor.Sprint(commandStringToSingleLine(commands[name].Command)))
 	}
 
 }
