@@ -26,7 +26,7 @@ func (c *Config) GetShell() Shell {
 	return NewShell(defaultShell)
 }
 
-func (c *CommandDef) Execute(conf Config) error {
+func (c *CommandDef) Execute(conf Config, args ...string) error {
 	// Handle pre-commands
 	for _, name := range c.Needs {
 		// TODO: handle invalid names
@@ -53,7 +53,7 @@ func (c *CommandDef) Execute(conf Config) error {
 	run := strings.TrimSpace(c.Run)
 	if len(run) > 0 {
 		shell := conf.GetShell()
-		err := shell.Run(run)
+		err := shell.Run(run, args...)
 		if err != nil {
 			fmt.Printf("%s %s\n", color.RedString(string(run)), secondaryColor.Sprint(err))
 			return err

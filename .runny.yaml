@@ -15,3 +15,5 @@ commands:
       - git-root
       - go-files
     run: echo "Hello world!"
+  ls:
+    run: ls

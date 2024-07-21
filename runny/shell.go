@@ -5,10 +5,11 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"strings"
 )
 
 type Shell interface {
-	Run(string) error
+	Run(string, ...string) error
 }
 
 type BashShell struct {
@@ -23,7 +24,10 @@ func NewShell(command string) Shell {
 	panic(fmt.Sprintf("Shell not supported: %v", command))
 }
 
-func (b BashShell) Run(command string) error {
+func (b BashShell) Run(command string, extraArgs ...string) error {
+	if len(extraArgs) > 0 {
+		command = command + " " + strings.Join(extraArgs, " ")
+	}
 	args := []string{"-c", command}
 
 	cmd := exec.Command(b.command, args...)

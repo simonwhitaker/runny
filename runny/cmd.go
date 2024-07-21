@@ -46,7 +46,7 @@ func Run() {
 	if len(os.Args) > 1 {
 		name := CommandName(os.Args[1])
 		if command, ok := conf.Commands[name]; ok {
-			command.Execute(conf)
+			command.Execute(conf, os.Args[2:]...)
 		} else {
 			color.Red("Command not found")
 		}
