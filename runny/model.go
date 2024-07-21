@@ -80,14 +80,13 @@ func (c *Config) PrintCommands() {
 }
 
 func (c *Config) Execute(name CommandName, args ...string) error {
-	command, ok := c.Commands[name]
 	shell := c.GetShell()
-
+	command, ok := c.Commands[name]
 	if !ok {
 		return fmt.Errorf("unknown command: %s", name)
 	}
 
-	// Check the If
+	// Check the If condition
 	cond := strings.TrimSpace(command.If)
 	if len(cond) > 0 {
 		err := shell.Run(cond, []string{}, false, c.verbose)
@@ -100,9 +99,8 @@ func (c *Config) Execute(name CommandName, args ...string) error {
 		}
 	}
 
-	// Handle pre-commands
+	// Handle Needs
 	for _, name := range command.Needs {
-		// TODO: handle invalid names
 		err := c.Execute(name)
 		if err != nil {
 			return err
