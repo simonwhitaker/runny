@@ -1,0 +1,11 @@
+shell: /bin/bash
+commands:
+  foo:
+    run: ls foo
+  bar:
+    needs:
+      - foo
+    run: ls bar
+  baz:
+    if: test -e foo.txt
+    run: ls baz

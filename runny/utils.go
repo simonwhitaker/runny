@@ -21,10 +21,10 @@ func commandStringToSingleLine(command string, maxlength int) string {
 	return result
 }
 
-func readConfig() (Config, error) {
+func readConfig(path string) (Config, error) {
 	// Read .runny.yaml from the current directory
 	var conf Config
-	yamlFile, err := os.ReadFile(".runny.yaml")
+	yamlFile, err := os.ReadFile(path)
 	if err != nil {
 		return conf, err
 	}

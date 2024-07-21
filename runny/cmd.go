@@ -7,7 +7,7 @@ import (
 )
 
 func Run() {
-	runny, err := readConfig()
+	runny, err := readConfig(".runny.yaml")
 	if err != nil {
 		color.Red("Problem reading config: %v", err)
 	}
