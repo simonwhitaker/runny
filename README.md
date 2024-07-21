@@ -7,7 +7,7 @@ Stop using Makefiles to run things. It's 2024. Use Runny.
 ## Installation
 
 ```command
-go install .
+brew install simonwhitaker/tap/runny
 ```
 
 ## Usage
