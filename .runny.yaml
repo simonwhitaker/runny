@@ -1,7 +1,9 @@
 shell: /bin/bash
 commands:
   clean:
-    run: rm -rf dist
+    run: |
+      go clean ./...
+      rm -rf dist
   install-goreleaser:
     if: "! command -v goreleaser"
     run: brew install goreleaser/tap/goreleaser
@@ -12,3 +14,5 @@ commands:
     run: |
       export GITHUB_TOKEN=$(gh auth token)
       goreleaser
+  test:
+    run: go test ./...
