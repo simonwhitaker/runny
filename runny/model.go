@@ -24,10 +24,15 @@ type Config struct {
 }
 
 func (c *Config) GetShell() Shell {
-	if len(c.Shell) > 0 {
-		return NewShell(c.Shell)
+	shellString := c.Shell
+	if len(shellString) == 0 {
+		shellString = defaultShell
 	}
-	return NewShell(defaultShell)
+	shell, err := NewShell(shellString)
+	if err != nil {
+		panic(err)
+	}
+	return shell
 }
 
 func (c *Config) ShowHelp() {
@@ -58,6 +63,8 @@ func (c *Config) ShowHelp() {
 
 func (c *Config) Execute(name CommandName, args ...string) error {
 	command, ok := c.Commands[name]
+	shell := c.GetShell()
+
 	if !ok {
 		return fmt.Errorf("unknown command: %s", name)
 	}
@@ -74,7 +81,6 @@ func (c *Config) Execute(name CommandName, args ...string) error {
 	// Check the If
 	cond := strings.TrimSpace(command.If)
 	if len(cond) > 0 {
-		shell := c.GetShell()
 		err := shell.Run(cond)
 		if err != nil {
 			// Run returns an error if the exit status is not zero. So in this case, this means the test failed.
@@ -86,7 +92,6 @@ func (c *Config) Execute(name CommandName, args ...string) error {
 	// Handle the Run
 	run := strings.TrimSpace(command.Run)
 	if len(run) > 0 {
-		shell := c.GetShell()
 		err := shell.Run(run, args...)
 		if err != nil {
 			fmt.Printf("%s %s\n", color.RedString(string(run)), secondaryColor.Sprint(err))

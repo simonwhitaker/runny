@@ -16,12 +16,12 @@ type BashShell struct {
 	command string
 }
 
-func NewShell(command string) Shell {
+func NewShell(command string) (Shell, error) {
 	switch path.Base(command) {
 	case "bash":
-		return BashShell{command: command}
+		return BashShell{command: command}, nil
 	}
-	panic(fmt.Sprintf("Shell not supported: %v", command))
+	return nil, fmt.Errorf("unsupported shell: %s", command)
 }
 
 func (b BashShell) Run(command string, extraArgs ...string) error {
