@@ -87,15 +87,6 @@ func (c *Config) Execute(name CommandName, args ...string) error {
 		return fmt.Errorf("unknown command: %s", name)
 	}
 
-	// Handle pre-commands
-	for _, name := range command.Needs {
-		// TODO: handle invalid names
-		err := c.Execute(name)
-		if err != nil {
-			return err
-		}
-	}
-
 	// Check the If
 	cond := strings.TrimSpace(command.If)
 	if len(cond) > 0 {
@@ -106,6 +97,15 @@ func (c *Config) Execute(name CommandName, args ...string) error {
 				secondaryColor.Printf("%v: '%v' not true, skipping\n", name, cond)
 			}
 			return nil
+		}
+	}
+
+	// Handle pre-commands
+	for _, name := range command.Needs {
+		// TODO: handle invalid names
+		err := c.Execute(name)
+		if err != nil {
+			return err
 		}
 	}
 
