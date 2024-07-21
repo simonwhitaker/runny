@@ -2,8 +2,6 @@ package runny
 
 import (
 	"fmt"
-	"os"
-	"os/exec"
 	"strings"
 
 	"github.com/fatih/color"
@@ -17,14 +15,14 @@ type CommandDef struct {
 
 type Config struct {
 	Commands map[CommandName]CommandDef `yaml:"commands"`
-	shell    string                     `yaml:"shell"`
+	Shell    string                     `yaml:"shell"`
 }
 
-func (c *Config) GetShell() string {
-	if len(c.shell) > 0 {
-		return c.shell
+func (c *Config) GetShell() Shell {
+	if len(c.Shell) > 0 {
+		return NewShell(c.Shell)
 	}
-	return defaultShell
+	return NewShell(defaultShell)
 }
 
 func (c *CommandDef) Execute(conf Config) error {
@@ -41,13 +39,8 @@ func (c *CommandDef) Execute(conf Config) error {
 	// Handle the command
 	command := strings.TrimSpace(c.Run)
 	if len(command) > 0 {
-		// FIXME: -c is bash-specific, won't work with every shell
-		args := []string{"-c", command}
-
-		cmd := exec.Command(conf.GetShell(), args...)
-		cmd.Stdout = os.Stdout
-
-		err := cmd.Run()
+		shell := conf.GetShell()
+		err := shell.Run(command)
 		if err != nil {
 			fmt.Printf("%s %s\n", color.RedString(string(command)), secondaryColor.Sprint(err))
 			return err
