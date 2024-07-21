@@ -7,9 +7,6 @@ commands:
   broken:
     # A deliberately broken command
     run: foo bar wibble
-  readme-stats:
-    if: "! test -e README.stats"
-    run: wc README.md > README.stats
   compound:
     needs:
       - git-root
@@ -17,3 +14,6 @@ commands:
     run: echo "Hello world!"
   ls:
     run: ls
+  lazygit:
+    if: "! command -v lazygit"
+    command: brew install jesseduffield/lazygit/lazygit
