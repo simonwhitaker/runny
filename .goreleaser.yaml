@@ -38,6 +38,10 @@ brews:
     commit_author:
       name: Simon Whitaker
       email: sw@netcetera.org
+    extra_install: |
+      bash_completion.install "completions/runny-completion.bash"
+      fish_completion.install "completions/runny.fish"
+      zsh_completion.install "completions/runny.zsh" => "_runny"
 
 checksum:
   name_template: "checksums.txt"
