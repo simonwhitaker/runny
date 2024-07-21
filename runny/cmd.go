@@ -1,7 +1,6 @@
 package runny
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/fatih/color"
@@ -21,9 +20,10 @@ func Run() {
 			runny.ShowHelp()
 			return
 		case "-v", "--verbose":
-			// TODO: handle verbose case
+			runny.verbose = true
 		default:
-			panic(fmt.Sprintf("Unknown option: %s", option))
+			color.Red("Unknown option: %s", option)
+			os.Exit(1)
 		}
 		args = args[1:]
 	}
