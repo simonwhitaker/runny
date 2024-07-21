@@ -1,23 +1,16 @@
 shell: /bin/bash
 commands:
   git-root:
-    command: git rev-parse --show-toplevel
+    run: git rev-parse --show-toplevel
   go-files:
-    command: find . -name "*.go" -exec ls -l \{\} \;
+    run: find . -name "*.go" -exec ls -l \{\} \;
   broken:
     # A deliberately broken command
-    command: foo bar wibble
+    run: foo bar wibble
   readme-stats:
-    command: |
-      if [[ -e README.md ]]; then
-        wc README.md
-      else
-        echo "Couldn't find README.md"
-      fi
+    run: wc README.md > README.stats
   compound:
-    pre:
+    needs:
       - git-root
       - go-files
-    command: echo "Hello world!"
-    post:
-      - git-root
+    run: echo "Hello world!"

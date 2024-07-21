@@ -27,7 +27,7 @@ func showHelp(conf Config) {
 	}
 
 	for _, name := range names {
-		var rawCommand = commandStringToSingleLine(commands[name].Command, maxCommandLength)
+		var rawCommand = commandStringToSingleLine(commands[name].Run, maxCommandLength)
 
 		fmt.Print(primaryColor.Sprint(name))
 		fmt.Print(separator)

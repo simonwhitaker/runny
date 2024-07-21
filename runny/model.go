@@ -11,9 +11,8 @@ import (
 
 type CommandName string
 type CommandDef struct {
-	Command string        `yaml:"command"`
-	Pre     []CommandName `yaml:"pre"`
-	Post    []CommandName `yaml:"post"`
+	Run   string        `yaml:"run"`
+	Needs []CommandName `yaml:"needs"`
 }
 
 type Config struct {
@@ -30,7 +29,7 @@ func (c *Config) GetShell() string {
 
 func (c *CommandDef) Execute(conf Config) error {
 	// Handle pre-commands
-	for _, name := range c.Pre {
+	for _, name := range c.Needs {
 		// TODO: handle invalid names
 		command := conf.Commands[name]
 		err := command.Execute(conf)
@@ -40,7 +39,7 @@ func (c *CommandDef) Execute(conf Config) error {
 	}
 
 	// Handle the command
-	command := strings.TrimSpace(c.Command)
+	command := strings.TrimSpace(c.Run)
 	if len(command) > 0 {
 		// FIXME: -c is bash-specific, won't work with every shell
 		args := []string{"-c", command}
@@ -51,16 +50,6 @@ func (c *CommandDef) Execute(conf Config) error {
 		err := cmd.Run()
 		if err != nil {
 			fmt.Printf("%s %s\n", color.RedString(string(command)), secondaryColor.Sprint(err))
-			return err
-		}
-	}
-
-	// Handle post-commands
-	for _, name := range c.Post {
-		// TODO: handle invalid names
-		command := conf.Commands[name]
-		err := command.Execute(conf)
-		if err != nil {
 			return err
 		}
 	}
