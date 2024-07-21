@@ -42,11 +42,26 @@ func Run() {
 		color.Red("Problem reading config: %v", err)
 	}
 
+	args := os.Args[1:]
+	for len(args) > 0 && args[0][0] == '-' {
+		option := args[0]
+		switch option {
+		case "-h", "--help":
+			showHelp(conf)
+			return
+		case "-v", "--verbose":
+			// TODO: handle verbose case
+		default:
+			panic(fmt.Sprintf("Unknown option: %s", option))
+		}
+		args = args[1:]
+	}
+
 	// read command line args
-	if len(os.Args) > 1 {
-		name := CommandName(os.Args[1])
+	if len(args) > 0 {
+		name := CommandName(args[0])
 		if command, ok := conf.Commands[name]; ok {
-			command.Execute(conf, os.Args[2:]...)
+			command.Execute(conf, args[1:]...)
 		} else {
 			color.Red("Command not found")
 		}
