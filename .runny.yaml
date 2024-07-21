@@ -1,4 +1,7 @@
 shell: /bin/bash
+env:
+  - FOO=fooster
+  - BAR=barbara
 commands:
   clean:
     run: |
@@ -16,3 +19,7 @@ commands:
       goreleaser
   test:
     run: go test ./...
+  test-env:
+    env:
+      - FOO=baz
+    run: echo $FOO $BAR

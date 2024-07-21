@@ -16,11 +16,13 @@ type CommandDef struct {
 	Run   string
 	Needs []CommandName
 	If    string
+	Env   []string
 }
 
 type Config struct {
 	Commands map[CommandName]CommandDef
 	Shell    string
+	Env      []string
 	verbose  bool
 }
 
@@ -88,10 +90,12 @@ func (c *Config) Execute(name CommandName, args ...string) error {
 		return fmt.Errorf(errorMsg)
 	}
 
+	env := append(c.Env, command.Env...)
+
 	// Check the If condition
 	cond := strings.TrimSpace(command.If)
 	if len(cond) > 0 {
-		err := shell.Run(cond, []string{}, false, c.verbose)
+		err := shell.Run(cond, []string{}, false, c.verbose, env)
 		if err != nil {
 			// Run returns an error if the exit status is not zero. So in this case, this means the test failed.
 			if c.verbose {
@@ -112,7 +116,7 @@ func (c *Config) Execute(name CommandName, args ...string) error {
 	// Handle the Run
 	run := strings.TrimSpace(command.Run)
 	if len(run) > 0 {
-		err := shell.Run(run, args, true, c.verbose)
+		err := shell.Run(run, args, true, c.verbose, env)
 		if err != nil {
 			fmt.Printf("%s %s\n", color.RedString(string(run)), secondaryColor.Sprint(err))
 			return err
