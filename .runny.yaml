@@ -1,19 +1,14 @@
 shell: /bin/bash
 commands:
-  git-root:
-    run: git rev-parse --show-toplevel
-  go-files:
-    run: find . -name "*.go" -exec ls -l \{\} \;
-  broken:
-    # A deliberately broken command
-    run: foo bar wibble
-  compound:
+  clean:
+    run: rm -rf dist
+  install-goreleaser:
+    if: "! command -v goreleaser"
+    run: brew install goreleaser/tap/goreleaser
+  release:
     needs:
-      - git-root
-      - go-files
-    run: echo "Hello world!"
-  ls:
-    run: ls
-  lazygit:
-    if: "! command -v lazygit"
-    command: brew install jesseduffield/lazygit/lazygit
+      - clean
+      - install-goreleaser
+    run: |
+      export GITHUB_TOKEN=$(gh auth token)
+      goreleaser
