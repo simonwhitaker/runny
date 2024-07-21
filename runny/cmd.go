@@ -2,14 +2,12 @@ package runny
 
 import (
 	"os"
-
-	"github.com/fatih/color"
 )
 
 func Run() {
 	runny, err := readConfig(".runny.yaml")
 	if err != nil {
-		color.Red("Problem reading config: %v", err)
+		errorColor.Printf("Problem reading config: %v\n", err)
 	}
 
 	args := os.Args[1:]
@@ -22,7 +20,7 @@ func Run() {
 		case "-v", "--verbose":
 			runny.verbose = true
 		default:
-			color.Red("Unknown option: %s", option)
+			errorColor.Printf("Unknown option: %s\n", option)
 			os.Exit(1)
 		}
 		args = args[1:]

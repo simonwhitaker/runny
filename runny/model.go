@@ -31,7 +31,7 @@ func (c *Config) GetShell() Shell {
 	}
 	shell, err := NewShell(shellString)
 	if err != nil {
-		color.Red("Error: %v", err)
+		errorColor.Printf("Error: %v\n", err)
 		os.Exit(1)
 	}
 	return shell
