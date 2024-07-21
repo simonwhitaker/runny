@@ -37,6 +37,7 @@ func (b BashShell) Run(command string, extraArgs []string, echoStdout, verbose b
 	cmd := exec.Command(b.command, args...)
 	if echoStdout {
 		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
 	}
 
 	return cmd.Run()
