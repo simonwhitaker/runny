@@ -83,7 +83,9 @@ func (c *Config) Execute(name CommandName, args ...string) error {
 	shell := c.GetShell()
 	command, ok := c.Commands[name]
 	if !ok {
-		return fmt.Errorf("unknown command: %s", name)
+		errorMsg := fmt.Sprintf("unknown command: %s", name)
+		errorColor.Println(errorMsg)
+		return fmt.Errorf(errorMsg)
 	}
 
 	// Check the If condition
