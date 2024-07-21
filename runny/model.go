@@ -37,7 +37,23 @@ func (c *Config) GetShell() Shell {
 	return shell
 }
 
-func (c *Config) ShowHelp() {
+func (c *Config) PrintHelp() {
+	titleString := color.New(color.FgYellow, color.Bold).Sprintf("runny")
+	usageString := color.New(color.Bold).Sprintf("runny [options] [command]")
+	fmt.Printf(`%s -- for running things.
+
+Usage:
+  %s
+
+Options:
+  -h, --help     Show this help
+  -v, --verbose  Enable verbose mode
+
+Run without arguments to list commands.`, titleString, usageString)
+	fmt.Print("\n")
+}
+
+func (c *Config) PrintCommands() {
 	commands := c.Commands
 	names := make([]CommandName, len(commands))
 	i := 0

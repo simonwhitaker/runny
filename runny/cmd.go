@@ -17,7 +17,7 @@ func Run() {
 		option := args[0]
 		switch option {
 		case "-h", "--help":
-			runny.ShowHelp()
+			runny.PrintHelp()
 			return
 		case "-v", "--verbose":
 			runny.verbose = true
@@ -33,6 +33,6 @@ func Run() {
 		name := CommandName(args[0])
 		runny.Execute(name, args[1:]...)
 	} else {
-		runny.ShowHelp()
+		runny.PrintCommands()
 	}
 }
