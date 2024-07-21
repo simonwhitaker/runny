@@ -2,7 +2,7 @@
 
 <img src="./assets/runny-logo.png" width="100" alt="Runny logo" />
 
-Stop using Makefiles to run things. It's 2024. Use Runny.
+It's the future, so stop using Makefiles to run things. Use Runny.
 
 ## Installation
 
