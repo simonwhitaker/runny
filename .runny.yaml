@@ -8,6 +8,7 @@ commands:
     # A deliberately broken command
     run: foo bar wibble
   readme-stats:
+    if: "! test -e README.stats"
     run: wc README.md > README.stats
   compound:
     needs:

@@ -9,13 +9,14 @@ import (
 
 type CommandName string
 type CommandDef struct {
-	Run   string        `yaml:"run"`
-	Needs []CommandName `yaml:"needs"`
+	Run   string
+	Needs []CommandName
+	If    string
 }
 
 type Config struct {
-	Commands map[CommandName]CommandDef `yaml:"commands"`
-	Shell    string                     `yaml:"shell"`
+	Commands map[CommandName]CommandDef
+	Shell    string
 }
 
 func (c *Config) GetShell() Shell {
@@ -36,13 +37,25 @@ func (c *CommandDef) Execute(conf Config) error {
 		}
 	}
 
-	// Handle the command
-	command := strings.TrimSpace(c.Run)
-	if len(command) > 0 {
+	// Check the If
+	cond := strings.TrimSpace(c.If)
+	if len(cond) > 0 {
 		shell := conf.GetShell()
-		err := shell.Run(command)
+		err := shell.Run(cond)
 		if err != nil {
-			fmt.Printf("%s %s\n", color.RedString(string(command)), secondaryColor.Sprint(err))
+			// Run returns an error if the exit status is not zero. So in this case, this means the test failed.
+			// secondaryColor.Printf("'%v' not true\n", cond)
+			return nil
+		}
+	}
+
+	// Handle the Run
+	run := strings.TrimSpace(c.Run)
+	if len(run) > 0 {
+		shell := conf.GetShell()
+		err := shell.Run(run)
+		if err != nil {
+			fmt.Printf("%s %s\n", color.RedString(string(run)), secondaryColor.Sprint(err))
 			return err
 		}
 	}
