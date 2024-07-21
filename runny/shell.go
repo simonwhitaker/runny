@@ -9,7 +9,7 @@ import (
 )
 
 type Shell interface {
-	Run(string, bool, bool, ...string) error
+	Run(command string, extraArgs []string, echoStdout, verbose bool) error
 }
 
 type BashShell struct {
@@ -24,7 +24,7 @@ func NewShell(command string) (Shell, error) {
 	return nil, fmt.Errorf("unsupported shell: %s", command)
 }
 
-func (b BashShell) Run(command string, echoStdout bool, verbose bool, extraArgs ...string) error {
+func (b BashShell) Run(command string, extraArgs []string, echoStdout, verbose bool) error {
 	if len(extraArgs) > 0 {
 		command = command + " " + strings.Join(extraArgs, " ")
 	}
