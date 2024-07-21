@@ -29,6 +29,9 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
+    files:
+      - completions/*
+
 brews:
   - name: runny
     homepage: https://github.com/simonwhitaker/runny
