@@ -16,21 +16,21 @@ Create a .runny.yaml:
 
 ```yaml
 commands:
-    git-root:
-        command: git rev-parse --show-toplevel
-    clean:
-        command: rm -rf node_modules
-    readme-stats:
-        command: |
-            if [[ -e README.md ]]; then
-                wc README.md
-            else
-                echo "Couldn't find README.md"
-            fi
+  install-uv:
+    if: "! command -v uv"
+    command: pip install uv
+  pip-sync:
+    needs: install-uv
+    command: uv pip sync requirements.txt
+  pip-compile-and-sync:
+    needs: install-uv
+    command: |
+      uv pip compile requirements.in -o requirements.txt
+      uv pip sync requirements.txt
 ```
 
 Then run commands with runny:
 
 ```command
-runny clean
+runny pip-compile-and-sync
 ```
