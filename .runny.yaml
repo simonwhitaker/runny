@@ -10,6 +10,9 @@ commands:
   install-goreleaser:
     if: "! command -v goreleaser"
     run: brew install goreleaser/tap/goreleaser
+  install-pre-commit:
+    if: "! command -v pre-commit"
+    run: brew install pre-commit
   release:
     needs:
       - clean
@@ -17,7 +20,7 @@ commands:
     run: |
       export GITHUB_TOKEN=$(gh auth token)
       goreleaser
-  generate-schema:
+  generate:
     run: go generate ./...
   test:
     run: go test ./...
