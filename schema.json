@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "properties": {
+    "shell": {
+      "type": "string"
+    },
+    "env": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "commands": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "if": {
+            "type": "string"
+          },
+          "run": {
+            "type": "string"
+          },
+          "needs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "env": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": ["commands"]
+}
