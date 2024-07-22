@@ -15,6 +15,7 @@ brew install simonwhitaker/tap/runny
 Create a .runny.yaml:
 
 ```yaml
+shell: /bin/bash
 commands:
   install-uv:
     if: "! command -v uv"
