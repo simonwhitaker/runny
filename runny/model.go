@@ -66,13 +66,14 @@ func (c *Config) PrintCommands() {
 
 	slices.Sort(names)
 	var separator = " "
-	var maxCommandLength = 60
+	maxLineLength := 80
 	if !term.IsTerminal(int(os.Stdout.Fd())) {
 		separator = "\t"
-		maxCommandLength = 40
+		maxLineLength = 40
 	}
 
 	for _, name := range names {
+		maxCommandLength := maxLineLength - len(name) - 1
 		var rawCommand = commandStringToSingleLine(commands[name].Run, maxCommandLength)
 
 		fmt.Print(primaryColor.Sprint(name))

@@ -16,7 +16,7 @@ func commandStringToSingleLine(command string, maxlength int) string {
 	}
 	result := strings.Join(trimmedLines, "; ")
 	if len(result) > maxlength {
-		result = result[:maxlength-3] + "..."
+		result = result[:maxlength-1] + "…"
 	}
 	return result
 }
