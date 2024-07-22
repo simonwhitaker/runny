@@ -17,6 +17,8 @@ commands:
     run: |
       export GITHUB_TOKEN=$(gh auth token)
       goreleaser
+  generate-schema:
+    run: go generate ./...
   test:
     run: go test ./...
   test-env:

@@ -13,16 +13,16 @@ import (
 type CommandName string
 
 type CommandDef struct {
-	Run   string
-	Needs []CommandName
-	If    string
-	Env   []string
+	Run   string        `json:"run,omitempty"`
+	Needs []CommandName `json:"needs,omitempty"`
+	If    string        `json:"if,omitempty"`
+	Env   []string      `json:"env,omitempty"`
 }
 
 type Config struct {
-	Commands map[CommandName]CommandDef
-	Shell    string
-	Env      []string
+	Commands map[CommandName]CommandDef `json:"commands"`
+	Shell    string                     `json:"shell,omitempty"`
+	Env      []string                   `json:"env,omitempty"`
 	verbose  bool
 }
 

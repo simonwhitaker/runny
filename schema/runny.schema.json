@@ -1,0 +1,55 @@
+{
+    "$defs": {
+        "CommandDef": {
+            "additionalProperties": false,
+            "properties": {
+                "env": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "if": {
+                    "type": "string"
+                },
+                "needs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "run": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "Config": {
+            "additionalProperties": false,
+            "properties": {
+                "commands": {
+                    "additionalProperties": {
+                        "$ref": "#/$defs/CommandDef"
+                    },
+                    "type": "object"
+                },
+                "env": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "shell": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "commands"
+            ],
+            "type": "object"
+        }
+    },
+    "$id": "https://github.com/simonwhitaker/runny/runny/config",
+    "$ref": "#/$defs/Config",
+    "$schema": "https://json-schema.org/draft/2020-12/schema"
+}
