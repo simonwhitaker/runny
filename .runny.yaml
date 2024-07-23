@@ -28,3 +28,8 @@ commands:
     env:
       - FOO=baz
     run: echo $FOO $BAR
+  test-args:
+    argnames:
+      - aa
+      - bb
+    run: echo $aa is not $bb and $bb is not $aa

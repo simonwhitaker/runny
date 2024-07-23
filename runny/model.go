@@ -13,10 +13,11 @@ import (
 type CommandName string
 
 type CommandDef struct {
-	Run   string        `json:"run,omitempty"`
-	Needs []CommandName `json:"needs,omitempty"`
-	If    string        `json:"if,omitempty"`
-	Env   []string      `json:"env,omitempty"`
+	Run      string        `json:"run,omitempty"`
+	Needs    []CommandName `json:"needs,omitempty"`
+	If       string        `json:"if,omitempty"`
+	Env      []string      `json:"env,omitempty"`
+	ArgNames []string      `json:"argnames,omitempty"`
 }
 
 type Config struct {
@@ -111,6 +112,17 @@ func (c *Config) Execute(name CommandName, args ...string) error {
 		err := c.Execute(name)
 		if err != nil {
 			return err
+		}
+	}
+
+	// Collect args
+	if len(command.ArgNames) > 0 {
+		if len(args) < len(command.ArgNames) {
+			return fmt.Errorf("%d named args defined but only %d supplied", len(command.ArgNames), len(args))
+		}
+		for _, argName := range command.ArgNames {
+			env = append(env, fmt.Sprintf("%s=%s", argName, args[0]))
+			args = args[1:]
 		}
 	}
 

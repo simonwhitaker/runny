@@ -3,6 +3,12 @@
         "CommandDef": {
             "additionalProperties": false,
             "properties": {
+                "argnames": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
                 "env": {
                     "items": {
                         "type": "string"
