@@ -2,7 +2,14 @@
 
 <img src="./assets/runny-logo.png" width="100" alt="Runny logo" />
 
-It's the future, so stop using Makefiles to run things. Use Runny.
+Makefiles are for boomers. The future is Runny.
+
+## Features
+
+* ❤️ Simple YAML syntax inspired by Github Actions
+* 🪄 Full schema validaton == autocomplete in your favourite code editor
+* 🧱 Build workflows through composition with `needs`
+* 🏃‍♂️ Skip the steps you don't need to run with `if`
 
 ## Installation
 
@@ -28,6 +35,7 @@ commands:
     command: |
       uv pip compile requirements.in -o requirements.txt
       uv pip sync requirements.txt
+
 ```
 
 Then run commands with runny:
