@@ -111,6 +111,7 @@ func (c *Config) Execute(name CommandName, args ...string) error {
 	for _, name := range command.Needs {
 		err := c.Execute(name)
 		if err != nil {
+			errorColor.Print(err)
 			return err
 		}
 	}
@@ -131,7 +132,6 @@ func (c *Config) Execute(name CommandName, args ...string) error {
 	if len(run) > 0 {
 		err := shell.Run(run, args, true, c.verbose, env)
 		if err != nil {
-			fmt.Printf("%s %s\n", color.RedString(string(run)), secondaryColor.Sprint(err))
 			return err
 		}
 	}

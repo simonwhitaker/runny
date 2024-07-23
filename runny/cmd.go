@@ -29,7 +29,11 @@ func Run() {
 	// read command line args
 	if len(args) > 0 {
 		name := CommandName(args[0])
-		runny.Execute(name, args[1:]...)
+		err := runny.Execute(name, args[1:]...)
+		if err != nil {
+			errorColor.Println(err)
+			os.Exit(1)
+		}
 	} else {
 		runny.PrintCommands()
 	}
