@@ -14,12 +14,9 @@ commands:
     if: "! command -v pre-commit"
     run: brew install pre-commit
   release:
-    needs:
-      - clean
-      - install-goreleaser
-    run: |
-      export GITHUB_TOKEN=$(gh auth token)
-      goreleaser
+    argnames:
+      - tag
+    run: git tag -am $tag $tag && git push --tags
   generate:
     run: go generate ./...
   test:
