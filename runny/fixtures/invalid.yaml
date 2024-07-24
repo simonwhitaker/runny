@@ -1,0 +1,4 @@
+shell: /bin/bash
+commands:
+  - name: foo
+    run: ls foo

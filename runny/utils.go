@@ -1,6 +1,7 @@
 package runny
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
@@ -31,6 +32,9 @@ func readConfig(path string) (Config, error) {
 
 	err = yaml.Unmarshal(yamlFile, &conf)
 	if err != nil {
+		if strings.Contains(err.Error(), "cannot unmarshal") {
+			return conf, fmt.Errorf("invalid runny config file: %s", path)
+		}
 		return conf, err
 	}
 	return conf, nil

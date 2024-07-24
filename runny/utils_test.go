@@ -1,6 +1,7 @@
 package runny
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -43,5 +44,16 @@ func TestReadConfig(t *testing.T) {
 	expectedCommandFooRun := "ls foo"
 	if conf.Commands["foo"].Run != expectedCommandFooRun {
 		t.Fatalf("Expected foo command's run value to be %s, got %s", expectedCommandFooRun, conf.Commands["foo"].Run)
+	}
+}
+
+func TestReadInvalidConfig(t *testing.T) {
+	_, err := readConfig("fixtures/invalid.yaml")
+	if err == nil {
+		t.Fatalf("Expected an error when reading invalid config, but reading was succeeded")
+	}
+
+	if !strings.Contains(err.Error(), "invalid runny config file") {
+		t.Fatalf("unexpected error message: %v", err)
 	}
 }
