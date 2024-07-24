@@ -17,7 +17,7 @@ type Param struct {
 func TestCommandStringToSingleLine(t *testing.T) {
 	params := []Param{
 		{input: Input{command: "", maxLength: 80}, expected: ""},
-		{input: Input{command: "foo bar wibble", maxLength: 10}, expected: "foo bar..."},
+		{input: Input{command: "foo bar wibble", maxLength: 10}, expected: "foo bar w…"},
 		{input: Input{command: "foo\nbar", maxLength: 80}, expected: "foo; bar"},
 		{input: Input{command: " foo \n bar ", maxLength: 80}, expected: "foo; bar"},
 	}
