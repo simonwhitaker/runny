@@ -40,7 +40,7 @@ func (c *Config) GetShell() (Shell, error) {
 }
 
 func (c *Config) PrintHelp() {
-	titleString := color.New(color.FgYellow, color.Bold).Sprintf("runny")
+	titleString := color.New(color.FgYellow, color.Bold).Sprintf("🍯 runny")
 	usageString := color.New(color.Bold).Sprintf("runny [options] [command]")
 	fmt.Printf(`%s -- for running things.
 
