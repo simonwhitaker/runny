@@ -1,15 +1,26 @@
 package runny
 
 import (
+	"fmt"
 	"os"
+
+	"github.com/fatih/color"
 )
 
 func Run() {
-	runny, err := readConfig(".runny.yaml")
-	if err != nil {
-		errorColor.Printf("Problem reading config: %v\n", err)
+	exitWithError := func(err error) {
+		errStr := fmt.Sprintf("%v\n", err)
+		red := color.New(color.FgRed)
+		red.Fprint(os.Stderr, errStr)
+		os.Exit(1)
 	}
 
+	runny, err := readConfig(".runny.yaml")
+	if err != nil {
+		exitWithError(err)
+	}
+
+	// Parse command-line options
 	args := os.Args[1:]
 	for len(args) > 0 && args[0][0] == '-' {
 		option := args[0]
@@ -20,19 +31,17 @@ func Run() {
 		case "-v", "--verbose":
 			runny.verbose = true
 		default:
-			errorColor.Printf("Unknown option: %s\n", option)
-			os.Exit(1)
+			exitWithError(fmt.Errorf("unknown option: %s", option))
 		}
 		args = args[1:]
 	}
 
-	// read command line args
+	// Process runny command
 	if len(args) > 0 {
 		name := CommandName(args[0])
 		err := runny.Execute(name, args[1:]...)
 		if err != nil {
-			errorColor.Println(err)
-			os.Exit(1)
+			exitWithError(err)
 		}
 	} else {
 		runny.PrintCommands()

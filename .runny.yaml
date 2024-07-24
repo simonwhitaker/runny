@@ -3,6 +3,7 @@ env:
   - FOO=fooster
   - BAR=barbara
 commands:
+  # Commands I use when developing runny
   clean:
     run: |
       go clean ./...
@@ -21,12 +22,33 @@ commands:
     run: go generate ./...
   test:
     run: go test ./...
-  test-env:
+
+  # Demo commands to showcase various features of runny
+  demo-env:
     env:
       - FOO=baz
     run: echo $FOO $BAR
-  test-args:
+  demo-args:
     argnames:
       - aa
       - bb
     run: echo $aa is not $bb and $bb is not $aa
+  demo-multiline-command:
+    # Unlike Makefiles, runny makes it simple to run commands that span over multiple lines. Just write them exactly as
+    # you would in a regular script.
+    run: |
+      for x in 1 2 3; do
+        echo $x
+      done
+  demo-broken:
+    run: foo bar
+
+  demo-broken-dependency:
+    needs:
+      - demo-broken
+    run: ls
+
+  demo-unknown-dependency:
+    needs:
+      - unknown
+    run: ls

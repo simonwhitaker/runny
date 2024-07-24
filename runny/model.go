@@ -27,17 +27,16 @@ type Config struct {
 	verbose  bool
 }
 
-func (c *Config) GetShell() Shell {
+func (c *Config) GetShell() (Shell, error) {
 	shellString := c.Shell
 	if len(shellString) == 0 {
 		shellString = defaultShell
 	}
 	shell, err := NewShell(shellString)
 	if err != nil {
-		errorColor.Printf("Error: %v\n", err)
-		os.Exit(1)
+		return nil, err
 	}
-	return shell
+	return shell, nil
 }
 
 func (c *Config) PrintHelp() {
@@ -84,12 +83,14 @@ func (c *Config) PrintCommands() {
 }
 
 func (c *Config) Execute(name CommandName, args ...string) error {
-	shell := c.GetShell()
+	shell, err := c.GetShell()
+	if err != nil {
+		return err
+	}
+
 	command, ok := c.Commands[name]
 	if !ok {
-		errorMsg := fmt.Sprintf("unknown command: %s", name)
-		errorColor.Println(errorMsg)
-		return fmt.Errorf(errorMsg)
+		return fmt.Errorf("unknown command: %s", name)
 	}
 
 	env := append(c.Env, command.Env...)
@@ -111,7 +112,6 @@ func (c *Config) Execute(name CommandName, args ...string) error {
 	for _, name := range command.Needs {
 		err := c.Execute(name)
 		if err != nil {
-			errorColor.Print(err)
 			return err
 		}
 	}
