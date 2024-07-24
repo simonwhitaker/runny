@@ -13,5 +13,6 @@ repos:
     rev: v0.5.1
     hooks:
       - id: go-fmt
+      - id: go-unit-tests
       - id: go-generate
         args: ["./..."]
