@@ -17,7 +17,7 @@ commands:
   release:
     argnames:
       - tag
-    run: git tag -am $tag $tag && git push --tags
+    run: git tag -am $tag $tag && git push origin refs/tags/$tag
   generate:
     run: go generate ./...
   test:
