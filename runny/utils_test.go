@@ -21,6 +21,7 @@ func TestCommandStringToSingleLine(t *testing.T) {
 		{input: Input{command: "foo bar wibble", maxLength: 10}, expected: "foo bar w…"},
 		{input: Input{command: "foo\nbar", maxLength: 80}, expected: "foo; bar"},
 		{input: Input{command: " foo \n bar ", maxLength: 80}, expected: "foo; bar"},
+		{input: Input{command: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam convallis. Nunc lacus. Curabitur nunc mauris, commodo vel, eleifend in, ornare sit amet, felis. Nullam mi neque, feugiat et, porttitor vitae, pharetra non, lacus. Fusce imperdiet sem quis dui.", maxLength: 0}, expected: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam convallis. Nunc lacus. Curabitur nunc mauris, commodo vel, eleifend in, ornare sit amet, felis. Nullam mi neque, feugiat et, porttitor vitae, pharetra non, lacus. Fusce imperdiet sem quis dui."},
 	}
 	for _, p := range params {
 		output := commandStringToSingleLine(p.input.command, p.input.maxLength)

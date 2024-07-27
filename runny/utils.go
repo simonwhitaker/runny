@@ -16,7 +16,7 @@ func commandStringToSingleLine(command string, maxlength int) string {
 		trimmedLines = append(trimmedLines, strings.TrimSpace(line))
 	}
 	result := strings.Join(trimmedLines, "; ")
-	if len(result) > maxlength {
+	if maxlength > 0 && len(result) > maxlength {
 		result = result[:maxlength-1] + "…"
 	}
 	return result

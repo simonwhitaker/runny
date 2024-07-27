@@ -66,10 +66,20 @@ func (c *Config) PrintCommands() {
 
 	slices.Sort(names)
 	var separator = " "
-	maxLineLength := 80
-	if !term.IsTerminal(int(os.Stdout.Fd())) {
+	var maxLineLength int
+
+	if term.IsTerminal(int(os.Stdout.Fd())) {
+		if c.verbose {
+			maxLineLength = 0
+		} else {
+			width, _, err := term.GetSize(int(os.Stdin.Fd()))
+			if err == nil {
+				maxLineLength = width
+			}
+		}
+	} else {
 		separator = "\t"
-		maxLineLength = 40
+		maxLineLength = 0
 	}
 
 	for _, name := range names {
