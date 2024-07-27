@@ -40,10 +40,3 @@ commands:
       for x in 1 2 3; do
         echo $x
       done
-  demo-broken:
-    run: foo bar
-
-  demo-broken-dependency:
-    needs:
-      - demo-broken
-    run: ls
