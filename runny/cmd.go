@@ -7,17 +7,10 @@ import (
 	"github.com/fatih/color"
 )
 
-func Run() {
-	exitWithError := func(err error) {
-		errStr := fmt.Sprintf("%v\n", err)
-		red := color.New(color.FgRed)
-		red.Fprint(os.Stderr, errStr)
-		os.Exit(1)
-	}
-
-	runny, err := readConfig(".runny.yaml")
+func run(path string) error {
+	runny, err := readConfig(path)
 	if err != nil {
-		exitWithError(err)
+		return err
 	}
 
 	// Parse command-line options
@@ -27,11 +20,11 @@ func Run() {
 		switch option {
 		case "-h", "--help":
 			runny.PrintHelp()
-			return
+			return nil
 		case "-v", "--verbose":
 			runny.verbose = true
 		default:
-			exitWithError(fmt.Errorf("unknown option: %s", option))
+			return fmt.Errorf("unknown option: %s", option)
 		}
 		args = args[1:]
 	}
@@ -41,9 +34,20 @@ func Run() {
 		name := CommandName(args[0])
 		err := runny.Execute(name, args[1:]...)
 		if err != nil {
-			exitWithError(err)
+			return err
 		}
 	} else {
 		runny.PrintCommands()
+	}
+	return nil
+}
+
+func Run() {
+	err := run(".runny.yaml")
+	if err != nil {
+		errStr := fmt.Sprintf("%v\n", err)
+		red := color.New(color.FgRed)
+		red.Fprint(os.Stderr, errStr)
+		os.Exit(1)
 	}
 }
