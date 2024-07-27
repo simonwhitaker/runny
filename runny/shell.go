@@ -35,7 +35,7 @@ func (b BashShell) Run(command string, extraArgs []string, echoStdout, verbose b
 	args := []string{"-c", command}
 
 	cmd := exec.Command(b.command, args...)
-	cmd.Env = env
+	cmd.Env = append(os.Environ(), env...)
 	cmd.Stderr = os.Stderr
 	if echoStdout {
 		cmd.Stdout = os.Stdout
