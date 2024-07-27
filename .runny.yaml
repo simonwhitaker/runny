@@ -1,4 +1,4 @@
-shell: /bin/bash
+shell: /bin/zsh
 env:
   - FOO=fooster
   - BAR=barbara

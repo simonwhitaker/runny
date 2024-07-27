@@ -8,7 +8,7 @@ func TestNewShell(t *testing.T) {
 		t.Errorf("Expected a valid shell, got an error: %v", err)
 	}
 
-	_, err = NewShell("/bin/zsh")
+	_, err = NewShell("/bin/pwsh")
 	if err == nil {
 		t.Errorf("Expected an error")
 	}
