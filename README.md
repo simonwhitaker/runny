@@ -24,13 +24,15 @@ shell: /bin/bash
 commands:
   install-uv:
     if: "! command -v uv"
-    command: pip install uv
+    run: pip install uv
   pip-sync:
-    needs: install-uv
-    command: uv pip sync requirements.txt
+    needs:
+      - install-uv
+    run: uv pip sync requirements.txt
   pip-compile-and-sync:
-    needs: install-uv
-    command: |
+    needs:
+      - install-uv
+    run: |
       uv pip compile requirements.in -o requirements.txt
       uv pip sync requirements.txt
 
