@@ -48,15 +48,32 @@ func TestReadConfig(t *testing.T) {
 	}
 }
 
-func TestReadInvalidConfig(t *testing.T) {
-	_, err := readConfig("fixtures/invalid.yaml")
+func TestReadInvalidConfigs(t *testing.T) {
+	_, err := readConfig("fixtures/invalid-runny.yaml")
 	if err == nil {
-		t.Fatalf("Expected an error when reading invalid config, but reading was succeeded")
+		t.Fatalf("Expected an error when reading invalid runny config, but reading was successful")
 	}
 
 	if !strings.Contains(err.Error(), "invalid runny config file") {
 		t.Fatalf("unexpected error message: %v", err)
 	}
+
+	_, err = readConfig("fixtures/invalid-yaml.yaml")
+	if err == nil {
+		t.Fatalf("Expected an error when reading invalid YAML file, but reading was successful")
+	}
+}
+
+func TestReadMissingFIle(t *testing.T) {
+	_, err := readConfig("fixtures/does-not-exist.yaml")
+	if err == nil {
+		t.Fatalf("Expected an error when reading missing config, but reading was successful")
+	}
+
+	if !strings.Contains(err.Error(), "no such file or directory") {
+		t.Fatalf("unexpected error message: %v", err)
+	}
+
 }
 
 func TestConfigWithCircularDependency(t *testing.T) {

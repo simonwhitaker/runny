@@ -49,10 +49,10 @@ func (c *Config) validate() error {
 	g := graph.New(hash, graph.Directed(), graph.PreventCycles())
 
 	for cmdName := range c.Commands {
-		err := g.AddVertex(cmdName)
-		if err != nil {
-			return fmt.Errorf("error declaring command %s: %v", cmdName, err)
-		}
+		// The only error that can be returned here is if the vertex already exists (see
+		// https://github.com/dominikbraun/graph/blob/a999520a23a8fc232bfe3ef40f69a6f7d9f5bfde/store.go#L92), and the
+		// YAML unmarshaller already prevents that.
+		g.AddVertex(cmdName)
 	}
 
 	for cmdName, cmd := range c.Commands {
