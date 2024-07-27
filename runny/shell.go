@@ -40,6 +40,7 @@ func (shell PosixShell) Run(command string, extraArgs []string, echoStdout, verb
 	cmd := exec.Command(shell.command, args...)
 	cmd.Env = append(os.Environ(), env...)
 	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
 	if echoStdout {
 		cmd.Stdout = os.Stdout
 	}
