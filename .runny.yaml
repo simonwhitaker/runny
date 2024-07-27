@@ -14,6 +14,9 @@ commands:
   install-pre-commit:
     if: "! command -v pre-commit"
     run: brew install pre-commit
+  install-fish-completions:
+    # Homebrew installs these for you, but this is useful if you're installing with `go install .`
+    run: ln -s $PWD/completions/runny.fish ~/.config/fish/completions
   release:
     argnames:
       - tag
