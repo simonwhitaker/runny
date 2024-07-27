@@ -34,6 +34,10 @@ commands:
     run: go generate ./...
   test:
     run: go test ./...
+  test-coverage:
+    run: go test -coverprofile=c.out ./... && go tool cover -func="c.out"
+  test-coverage-html:
+    run: go test -coverprofile=c.out ./... && go tool cover -html="c.out"
 
   # Demo commands to showcase various features of runny
   demo-env:
