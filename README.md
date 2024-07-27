@@ -4,10 +4,10 @@ Makefiles are for boomers. The future is Runny.
 
 ## Features
 
-* ❤️ Simple YAML syntax inspired by Github Actions
+* ❤️ Simple YAML syntax (inspired by Github Actions)
 * 🪄 Full schema validaton == autocomplete in your favourite code editor
 * 🧱 Build workflows through composition with `needs` and `then`
-* 🏃‍♂️ Skip the steps you don't need to run with `if`
+* 🏃‍♂️ Run steps conditionally with `if`
 
 ## Installation
 
@@ -17,7 +17,7 @@ brew install simonwhitaker/tap/runny
 
 ## Usage
 
-Create a .runny.yaml:
+Create a `.runny.yaml` file:
 
 ```yaml
 shell: /bin/bash
@@ -46,5 +46,5 @@ commands:
 Then run commands with runny:
 
 ```command
-runny pip-compile-and-sync
+runny pip-install ruff
 ```
