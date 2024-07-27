@@ -1,6 +1,4 @@
-# Runny: for running things
-
-<img src="./assets/runny-logo.png" width="100" alt="Runny logo" />
+# 🍯 Runny: for running things
 
 Makefiles are for boomers. The future is Runny.
 
