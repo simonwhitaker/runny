@@ -58,3 +58,14 @@ func TestReadInvalidConfig(t *testing.T) {
 		t.Fatalf("unexpected error message: %v", err)
 	}
 }
+
+func TestConfigWithCircularDependency(t *testing.T) {
+	_, err := readConfig("fixtures/invalid-circular-dependency.yaml")
+	if err == nil {
+		t.Fatalf("Expected an error when reading invalid config, but reading was succeeded")
+	}
+
+	if !strings.Contains(err.Error(), "edge would create a cycle") {
+		t.Fatalf("unexpected error message: %v", err)
+	}
+}

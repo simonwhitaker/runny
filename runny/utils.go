@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/dominikbraun/graph"
 	"gopkg.in/yaml.v3"
 )
 
@@ -37,5 +38,30 @@ func readConfig(path string) (Config, error) {
 		}
 		return conf, err
 	}
-	return conf, nil
+
+	return conf, conf.validate()
+}
+
+func (c *Config) validate() error {
+	hash := func(c CommandName) string {
+		return string(c)
+	}
+	g := graph.New(hash, graph.Directed(), graph.PreventCycles())
+
+	for cmdName := range c.Commands {
+		err := g.AddVertex(cmdName)
+		if err != nil {
+			return fmt.Errorf("error declaring command %s: %v", cmdName, err)
+		}
+	}
+
+	for cmdName, cmd := range c.Commands {
+		for _, needsName := range cmd.Needs {
+			err := g.AddEdge(hash(cmdName), hash(needsName))
+			if err != nil {
+				return fmt.Errorf("error declaring %s as dependency of %s: %v", needsName, cmdName, err)
+			}
+		}
+	}
+	return nil
 }

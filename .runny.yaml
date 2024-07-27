@@ -47,8 +47,3 @@ commands:
     needs:
       - demo-broken
     run: ls
-
-  demo-unknown-dependency:
-    needs:
-      - unknown
-    run: ls

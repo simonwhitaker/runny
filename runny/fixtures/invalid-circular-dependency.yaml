@@ -1,0 +1,7 @@
+commands:
+  foo:
+    needs:
+      - bar
+  bar:
+    needs:
+      - foo
