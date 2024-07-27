@@ -6,7 +6,7 @@ Makefiles are for boomers. The future is Runny.
 
 * ❤️ Simple YAML syntax inspired by Github Actions
 * 🪄 Full schema validaton == autocomplete in your favourite code editor
-* 🧱 Build workflows through composition with `needs`
+* 🧱 Build workflows through composition with `needs` and `then`
 * 🏃‍♂️ Skip the steps you don't need to run with `if`
 
 ## Installation
@@ -35,7 +35,12 @@ commands:
     run: |
       uv pip compile requirements.in -o requirements.txt
       uv pip sync requirements.txt
-
+  pip-install:
+    argnames:
+      - packagespec
+    run: echo $packagespec >> requirements.in
+    then:
+      - pip-compile-and-sync
 ```
 
 Then run commands with runny:

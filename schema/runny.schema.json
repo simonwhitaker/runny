@@ -26,6 +26,12 @@
                 },
                 "run": {
                     "type": "string"
+                },
+                "then": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
                 }
             },
             "type": "object"

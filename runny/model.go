@@ -15,6 +15,7 @@ type CommandName string
 type CommandDef struct {
 	Run      string        `json:"run,omitempty"`
 	Needs    []CommandName `json:"needs,omitempty"`
+	Then     []CommandName `json:"then,omitempty"`
 	If       string        `json:"if,omitempty"`
 	Env      []string      `json:"env,omitempty"`
 	ArgNames []string      `json:"argnames,omitempty"`
@@ -141,6 +142,14 @@ func (c *Config) Execute(name CommandName, args ...string) error {
 	run := strings.TrimSpace(command.Run)
 	if len(run) > 0 {
 		err := shell.Run(run, args, true, c.verbose, env)
+		if err != nil {
+			return err
+		}
+	}
+
+	// Handle Then
+	for _, name := range command.Then {
+		err := c.Execute(name)
 		if err != nil {
 			return err
 		}
