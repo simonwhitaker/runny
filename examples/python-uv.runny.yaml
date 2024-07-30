@@ -1,0 +1,20 @@
+commands:
+  install-uv:
+    if: "! command -v uv"
+    run: pip install uv
+  pip-sync:
+    needs:
+      - install-uv
+    run: uv pip sync requirements.txt
+  pip-compile-and-sync:
+    needs:
+      - install-uv
+    run: |
+      uv pip compile requirements.in -o requirements.txt
+      uv pip sync requirements.txt
+  pip-install:
+    argnames:
+      - packagespec
+    run: echo $packagespec >> requirements.in
+    then:
+      - pip-compile-and-sync

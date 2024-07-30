@@ -1,5 +1,9 @@
 {
   "yaml.schemas": {
-    "./schema/runny.schema.json": ["fixtures/*.yaml", ".runny.yaml"]
+    "./schema/runny.schema.json": [
+      ".runny.yaml",
+      "examples/*.yaml",
+      "fixtures/*.yaml"
+    ]
   }
 }

@@ -1,0 +1,23 @@
+commands:
+  clean:
+    run: |
+      go clean ./...
+      rm -rf dist
+  install-goreleaser:
+    if: "! command -v goreleaser"
+    run: brew install goreleaser/tap/goreleaser
+  release:
+    needs:
+      - clean
+      - install-goreleaser
+    run: |
+      export GITHUB_TOKEN=$(gh auth token)
+      goreleaser
+  generate-schema:
+    run: go generate ./...
+  test:
+    run: go test ./...
+  test-coverage:
+    run: go test -coverprofile=c.out ./... && go tool cover -func="c.out"
+  test-coverage-html:
+    run: go test -coverprofile=c.out ./... && go tool cover -html="c.out"

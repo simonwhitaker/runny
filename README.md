@@ -48,3 +48,7 @@ Then run commands with runny:
 ```command
 runny pip-install ruff
 ```
+
+## Examples
+
+Have a look in the [examples folder](./examples/) for examples of how you might use Runny with various languages and frameworks.

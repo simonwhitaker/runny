@@ -1,0 +1,9 @@
+commands:
+  update-requirements:
+    run: pip freeze > requirements.txt
+  pip-install:
+    argnames:
+      - packagespec
+    run: pip install $packagespec
+    then:
+      - update-requirements
