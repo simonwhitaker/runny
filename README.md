@@ -52,3 +52,5 @@ runny pip-install ruff
 ## Examples
 
 Have a look in the [examples folder](./examples/) for examples of how you might use Runny with various languages and frameworks.
+
+(You could also look at this repo's [.runny.yaml](./.runny.yaml) file! I use Runny all the time when developing Runny.)
