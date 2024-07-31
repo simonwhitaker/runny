@@ -51,6 +51,66 @@ runny pip-install ruff
 
 ## Examples
 
-Have a look in the [examples folder](./examples/) for examples of how you might use Runny with various languages and frameworks.
+### Go
 
-(You could also look at this repo's [.runny.yaml](./.runny.yaml) file! I use Runny all the time when developing Runny.)
+```yaml
+commands:
+  clean:
+    run: |
+      go clean ./...
+      rm -rf dist
+  install-goreleaser:
+    if: "! command -v goreleaser"
+    run: brew install goreleaser/tap/goreleaser
+  release:
+    needs:
+      - clean
+      - install-goreleaser
+    run: |
+      export GITHUB_TOKEN=$(gh auth token)
+      goreleaser
+  generate:
+    run: go generate ./...
+  test:
+    run: go test ./...
+  test-coverage:
+    run: go test -coverprofile=c.out ./... && go tool cover -func="c.out"
+  test-coverage-html:
+    run: go test -coverprofile=c.out ./... && go tool cover -html="c.out"
+```
+
+### Python
+
+```yaml
+commands:
+  update-requirements:
+    run: pip freeze > requirements.txt
+  pip-install:
+    argnames:
+      - packagespec
+    run: pip install $packagespec
+    then:
+      - update-requirements
+```
+
+### Docker Compsose
+
+Docker Compose has good command-line completion already. But using runny, you can add entries for just the commands you use regularly, then get an uncluttered list of options when you tab-complete.
+
+```yaml
+commands:
+  up:
+    run: docker compose up -d
+  down:
+    run: docker compose down
+  build-and-up:
+    run: docker compose up --build -d
+  logs:
+    argnames:
+      - service
+    run: docker compose logs $service
+  shell:
+    argnames:
+      - service
+    run: docker compose exec $service sh
+```
