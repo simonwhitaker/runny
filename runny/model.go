@@ -19,6 +19,7 @@ type CommandDef struct {
 	If       string        `json:"if,omitempty"`
 	Env      []string      `json:"env,omitempty"`
 	ArgNames []string      `json:"argnames,omitempty"`
+	Internal bool          `json:"internal,omitempty"`
 }
 
 type Config struct {
@@ -58,11 +59,11 @@ Run without arguments to list commands.`, titleString, usageString)
 
 func (c *Config) PrintCommands() {
 	commands := c.Commands
-	names := make([]CommandName, len(commands))
-	i := 0
-	for key := range commands {
-		names[i] = key
-		i += 1
+	names := []CommandName{}
+	for key, cmd := range commands {
+		if c.verbose || !cmd.Internal {
+			names = append(names, key)
+		}
 	}
 
 	slices.Sort(names)

@@ -18,6 +18,9 @@
                 "if": {
                     "type": "string"
                 },
+                "internal": {
+                    "type": "boolean"
+                },
                 "needs": {
                     "items": {
                         "type": "string"
