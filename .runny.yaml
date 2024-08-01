@@ -8,12 +8,14 @@ commands:
     run: |
       go clean ./...
       rm -rf dist
-  install-goreleaser:
-    if: "! command -v goreleaser"
-    run: brew install goreleaser/tap/goreleaser
   install-pre-commit:
+    internal: true
     if: "! command -v pre-commit"
     run: brew install pre-commit
+  install-pre-commit-hooks:
+    needs:
+      - install-pre-commit
+    run: pre-commit install
   install-fish-completions:
     # Homebrew installs these for you, but this is useful if you're installing with `go install .`
     run: ln -s $PWD/completions/runny.fish ~/.config/fish/completions
@@ -38,21 +40,3 @@ commands:
     run: go test -coverprofile=c.out ./... && go tool cover -func="c.out"
   test-coverage-html:
     run: go test -coverprofile=c.out ./... && go tool cover -html="c.out"
-
-  # Demo commands to showcase various features of runny
-  demo-env:
-    env:
-      - FOO=baz
-    run: echo $FOO $BAR
-  demo-args:
-    argnames:
-      - aa
-      - bb
-    run: echo $aa is not $bb and $bb is not $aa
-  demo-multiline-command:
-    # Unlike Makefiles, runny makes it simple to run commands that span over multiple lines. Just write them exactly as
-    # you would in a regular script.
-    run: |
-      for x in 1 2 3; do
-        echo $x
-      done
