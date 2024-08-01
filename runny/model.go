@@ -33,9 +33,12 @@ type CommandDef struct {
 
 type Config struct {
 	Commands map[CommandName]CommandDef `json:"commands"`
-	Shell    string                     `json:"shell,omitempty"`
-	Env      []string                   `json:"env,omitempty"`
-	verbose  bool
+	// The shell to be used when running commands. Defaults to /bin/bash
+	Shell string `json:"shell,omitempty"`
+	// A list of environment variables to be set when running all commands
+	Env []string `json:"env,omitempty"`
+	// Set if the -v/--verbose flag is set when invoking Runny
+	verbose bool
 }
 
 func (c *Config) GetShell() (Shell, error) {
