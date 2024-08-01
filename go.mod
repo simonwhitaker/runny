@@ -3,7 +3,9 @@ module github.com/simonwhitaker/runny
 go 1.22.5
 
 require (
+	github.com/dominikbraun/graph v0.23.0
 	github.com/fatih/color v1.17.0
+	github.com/gomarkdown/markdown v0.0.0-20240730141124-034f12af3bf6
 	github.com/invopop/jsonschema v0.12.0
 	golang.org/x/term v0.22.0
 	gopkg.in/yaml.v3 v3.0.1
@@ -12,8 +14,6 @@ require (
 require (
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
-	github.com/dominikbraun/graph v0.23.0 // indirect
-	github.com/gomarkdown/markdown v0.0.0-20240730141124-034f12af3bf6 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
