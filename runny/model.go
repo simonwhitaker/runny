@@ -13,13 +13,22 @@ import (
 type CommandName string
 
 type CommandDef struct {
-	Run      string        `json:"run,omitempty"`
-	Needs    []CommandName `json:"needs,omitempty"`
-	Then     []CommandName `json:"then,omitempty"`
-	If       string        `json:"if,omitempty"`
-	Env      []string      `json:"env,omitempty"`
-	ArgNames []string      `json:"argnames,omitempty"`
-	Internal bool          `json:"internal,omitempty"`
+	// The command to be run
+	Run string `json:"run,omitempty"`
+	// A list of the commands that must be run before this one
+	Needs []CommandName `json:"needs,omitempty"`
+	// A list of the commands that must be run after this one
+	Then []CommandName `json:"then,omitempty"`
+	// A conditional expression; this command only runs if the If expression evaluates to true
+	If string `json:"if,omitempty"`
+	// A list of environment variables to be set when running the command
+	Env []string `json:"env,omitempty"`
+	// A list of argument names to be passed on the command line when invoking Runny. These arguments can be accessed in
+	// the Run string by prefixing them with $.
+	ArgNames []string `json:"argnames,omitempty"`
+	// If true, the command is suppressed from the output generated when you run Runny with no arguments, and from shell
+	// completion.
+	Internal bool `json:"internal,omitempty"`
 }
 
 type Config struct {
