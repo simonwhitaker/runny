@@ -30,6 +30,9 @@
                 "run": {
                     "type": "string"
                 },
+                "shell": {
+                    "type": "string"
+                },
                 "then": {
                     "items": {
                         "type": "string"

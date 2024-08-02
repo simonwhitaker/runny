@@ -2,7 +2,7 @@ package runny
 
 import "testing"
 
-func TestGetShell(t *testing.T) {
+func TestConfigGetShell(t *testing.T) {
 	c := Config{}
 	shell, err := c.GetShell()
 	if shell == nil || err != nil {
@@ -19,6 +19,25 @@ func TestGetShell(t *testing.T) {
 	_, err = c.GetShell()
 	if err == nil {
 		t.Errorf("Expected an error, but the call succeeded")
+	}
+}
+
+func TestCommandDefGetShell(t *testing.T) {
+	cmdWithShell := CommandDef{Shell: "/bin/zsh"}
+	cmdWithoutShell := CommandDef{}
+	c := Config{Shell: "/bin/bash", Commands: map[CommandName]CommandDef{
+		"cmdWithShell":    cmdWithShell,
+		"cmdWithoutShell": cmdWithoutShell,
+	}}
+
+	shell, err := cmdWithShell.GetShell(&c)
+	if shell, ok := shell.(*PosixShell); ok && shell.command != "/bin/zsh" {
+		t.Errorf("Expected a valid shell, got an error: %v", err)
+	}
+
+	shell, err = cmdWithoutShell.GetShell(&c)
+	if shell, ok := shell.(*PosixShell); ok && shell.command != "/bin/bash" {
+		t.Errorf("Expected a valid shell, got an error: %v", err)
 	}
 }
 

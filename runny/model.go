@@ -23,6 +23,8 @@ type CommandDef struct {
 	If string `json:"if,omitempty"`
 	// A list of environment variables to be set when running the command
 	Env []string `json:"env,omitempty"`
+	// The shell to be used when running the command. Defaults to /bin/bash
+	Shell string `json:"shell,omitempty"`
 	// A list of argument names to be passed on the command line when invoking Runny. These arguments can be accessed in
 	// the Run string by prefixing them with $.
 	ArgNames []string `json:"argnames,omitempty"`
@@ -31,9 +33,21 @@ type CommandDef struct {
 	Internal bool `json:"internal,omitempty"`
 }
 
+func (cmd *CommandDef) GetShell(c *Config) (Shell, error) {
+	shellString := cmd.Shell
+	if len(shellString) == 0 {
+		return c.GetShell()
+	}
+	shell, err := NewShell(shellString)
+	if err != nil {
+		return nil, err
+	}
+	return shell, nil
+}
+
 type Config struct {
 	Commands map[CommandName]CommandDef `json:"commands"`
-	// The shell to be used when running commands. Defaults to /bin/bash
+	// The shell to be used when running all commands. Defaults to /bin/bash
 	Shell string `json:"shell,omitempty"`
 	// A list of environment variables to be set when running all commands
 	Env []string `json:"env,omitempty"`
@@ -107,14 +121,14 @@ func (c *Config) PrintCommands() {
 }
 
 func (c *Config) Execute(name CommandName, args ...string) error {
-	shell, err := c.GetShell()
-	if err != nil {
-		return err
-	}
-
 	command, ok := c.Commands[name]
 	if !ok {
 		return fmt.Errorf("unknown command: %s", name)
+	}
+
+	shell, err := command.GetShell(c)
+	if err != nil {
+		return err
 	}
 
 	env := append(c.Env, command.Env...)
