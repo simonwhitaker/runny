@@ -1,9 +1,5 @@
 shell: /bin/bash
-env:
-  - FOO=fooster
-  - BAR=barbara
 commands:
-  # Commands I use when developing runny
   clean:
     run: |
       go clean ./...
