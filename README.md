@@ -93,7 +93,7 @@ commands:
       - update-requirements
 ```
 
-### Docker Compsose
+### Docker Compose
 
 Docker Compose has good command-line completion already. But using runny, you can add entries for just the commands you use regularly, then get an uncluttered list of options when you tab-complete.
 
