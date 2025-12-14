@@ -6,7 +6,6 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/fatih/color"
 	"golang.org/x/term"
 )
 
@@ -65,22 +64,6 @@ func (c *Config) GetShell() (Shell, error) {
 		return nil, err
 	}
 	return shell, nil
-}
-
-func (c *Config) PrintHelp() {
-	titleString := color.New(color.FgYellow, color.Bold).Sprintf("🍯 runny")
-	usageString := color.New(color.Bold).Sprintf("runny [options] [command]")
-	fmt.Printf(`%s -- for running things.
-
-Usage:
-  %s
-
-Options:
-  -h, --help     Show this help
-  -v, --verbose  Enable verbose mode
-
-Run without arguments to list commands.`, titleString, usageString)
-	fmt.Print("\n")
 }
 
 func (c *Config) PrintCommands() {

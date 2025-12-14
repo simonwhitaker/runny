@@ -41,21 +41,6 @@ func TestCommandDefGetShell(t *testing.T) {
 	}
 }
 
-func ExampleConfig_PrintHelp() {
-	c := Config{}
-	c.PrintHelp()
-	// Output: 🍯 runny -- for running things.
-	//
-	// Usage:
-	//   runny [options] [command]
-	//
-	// Options:
-	//   -h, --help     Show this help
-	//   -v, --verbose  Enable verbose mode
-	//
-	// Run without arguments to list commands.
-}
-
 func ExampleConfig_PrintCommands() {
 	c := Config{Commands: map[CommandName]CommandDef{"foo": {Run: "bar"}}}
 	c.PrintCommands()

@@ -52,3 +52,18 @@ func TestPrivateRun(t *testing.T) {
 		t.Fatalf("Expected error, got success")
 	}
 }
+
+func Example_printHelp() {
+	printHelp()
+	// Output: 🍯 runny -- for running things.
+	//
+	// Usage:
+	//   runny [options] [command]
+	//
+	// Options:
+	//   -h, --help     Show this help
+	//   -v, --verbose  Enable verbose mode
+	//   --init         Create a sample .runny.yaml file
+	//
+	// Run without arguments to list commands.
+}
