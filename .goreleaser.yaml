@@ -16,7 +16,8 @@ builds:
       - darwin
 
 archives:
-  - format: tar.gz
+  - formats:
+      - tar.gz
     # this name template makes the OS and Arch compatible with the results of uname.
     name_template: >-
       {{ .ProjectName }}_
@@ -28,12 +29,14 @@ archives:
     # use zip for windows archives
     format_overrides:
       - goos: windows
-        format: zip
+        formats:
+          - zip
     files:
       - completions/*
 
-brews:
+homebrew_casks:
   - name: runny
+    directory: Casks
     homepage: https://github.com/simonwhitaker/runny
     repository:
       owner: simonwhitaker
@@ -41,15 +44,21 @@ brews:
     commit_author:
       name: Simon Whitaker
       email: sw@netcetera.org
-    extra_install: |
-      bash_completion.install "completions/runny.bash" => "runny"
-      fish_completion.install "completions/runny.fish"
-      zsh_completion.install "completions/runny.zsh" => "_runny"
+    completions:
+      bash: completions/runny.bash
+      fish: completions/runny.fish
+      zsh: completions/runny.zsh
+    hooks:
+      post:
+        install: |
+          if OS.mac?
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/runny"]
+          end
 
 checksum:
   name_template: "checksums.txt"
 snapshot:
-  name_template: "{{ incpatch .Version }}-next"
+  version_template: "{{ incpatch .Version }}-next"
 changelog:
   sort: asc
   filters:
