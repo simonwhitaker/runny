@@ -16,6 +16,7 @@ Usage:
   %s
 
 Options:
+  -f, --file     Specify a runny file (default: .runny.yaml)
   -h, --help     Show this help
   -v, --verbose  Enable verbose mode
   --init         Create a sample .runny.yaml file
@@ -56,6 +57,12 @@ func run(path string) error {
 	for len(args) > 0 && args[0][0] == '-' {
 		option := args[0]
 		switch option {
+		case "-f", "--file":
+			args = args[1:]
+			if len(args) == 0 {
+				return fmt.Errorf("missing value for %s", option)
+			}
+			path = args[0]
 		case "-h", "--help":
 			printHelp()
 			return nil

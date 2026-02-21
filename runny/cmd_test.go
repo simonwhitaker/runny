@@ -29,6 +29,18 @@ func TestPrivateRun(t *testing.T) {
 		t.Fatalf("Expected success when run with -h, got error: %v", err)
 	}
 
+	os.Args = []string{os.Args[0], "-f", "fixtures/minimal.yaml"}
+	err = run(".runny.yaml")
+	if err != nil {
+		t.Fatalf("Expected success when run with -f, got error: %v", err)
+	}
+
+	os.Args = []string{os.Args[0], "-f"}
+	err = run("fixtures/minimal.yaml")
+	if err == nil {
+		t.Fatalf("Expected failure when run with -f without value, got success")
+	}
+
 	os.Args = []string{os.Args[0], "-Z"}
 	err = run("fixtures/minimal.yaml")
 	if err == nil {
@@ -61,6 +73,7 @@ func Example_printHelp() {
 	//   runny [options] [command]
 	//
 	// Options:
+	//   -f, --file     Specify a runny file (default: .runny.yaml)
 	//   -h, --help     Show this help
 	//   -v, --verbose  Enable verbose mode
 	//   --init         Create a sample .runny.yaml file
