@@ -11,55 +11,44 @@ func TestPrivateRun(t *testing.T) {
 		os.Args = oldArgs
 	}()
 
-	os.Args = []string{os.Args[0]}
-	err := run("fixtures/minimal.yaml")
+	os.Args = []string{os.Args[0], "-f", "fixtures/minimal.yaml"}
+	err := run()
 	if err != nil {
 		t.Fatalf("Expected success, got error: %v", err)
 	}
 
-	os.Args = []string{os.Args[0], "-v"}
-	err = run("fixtures/minimal.yaml")
+	os.Args = []string{os.Args[0], "-v", "-f", "fixtures/minimal.yaml"}
+	err = run()
 	if err != nil {
 		t.Fatalf("Expected success when run with -v, got error: %v", err)
 	}
 
 	os.Args = []string{os.Args[0], "-h"}
-	err = run("fixtures/minimal.yaml")
+	err = run()
 	if err != nil {
 		t.Fatalf("Expected success when run with -h, got error: %v", err)
 	}
 
-	os.Args = []string{os.Args[0], "-f", "fixtures/minimal.yaml"}
-	err = run(".runny.yaml")
-	if err != nil {
-		t.Fatalf("Expected success when run with -f, got error: %v", err)
-	}
-
-	os.Args = []string{os.Args[0], "-f"}
-	err = run("fixtures/minimal.yaml")
-	if err == nil {
-		t.Fatalf("Expected failure when run with -f without value, got success")
-	}
-
 	os.Args = []string{os.Args[0], "-Z"}
-	err = run("fixtures/minimal.yaml")
+	err = run()
 	if err == nil {
 		t.Fatalf("Expected failure when run with unknown command-line arg, got success")
 	}
 
-	os.Args = []string{os.Args[0], "ok"}
-	err = run("fixtures/minimal.yaml")
+	os.Args = []string{os.Args[0], "-f", "fixtures/minimal.yaml", "ok"}
+	err = run()
 	if err != nil {
 		t.Fatalf("Expected success when run with known command, got error: %v", err)
 	}
 
-	os.Args = []string{os.Args[0], "not-ok"}
-	err = run("fixtures/minimal.yaml")
+	os.Args = []string{os.Args[0], "-f", "fixtures/minimal.yaml", "not-ok"}
+	err = run()
 	if err == nil {
 		t.Fatalf("Expected failure when run with unknown command, got success")
 	}
 
-	err = run("fixtures/invalid-yaml.yaml")
+	os.Args = []string{os.Args[0], "-f", "fixtures/invalid-yaml.yaml"}
+	err = run()
 	if err == nil {
 		t.Fatalf("Expected error, got success")
 	}

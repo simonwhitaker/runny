@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/fatih/color"
+	flag "github.com/spf13/pflag"
 )
 
 func printHelp() {
@@ -50,39 +51,37 @@ func initConfig(path string) error {
 	return nil
 }
 
-func run(path string) error {
-	// Parse command-line options
-	args := os.Args[1:]
-	verbose := false
-	for len(args) > 0 && args[0][0] == '-' {
-		option := args[0]
-		switch option {
-		case "-f", "--file":
-			args = args[1:]
-			if len(args) == 0 {
-				return fmt.Errorf("missing value for %s", option)
-			}
-			path = args[0]
-		case "-h", "--help":
-			printHelp()
-			return nil
-		case "-v", "--verbose":
-			verbose = true
-		case "--init":
-			return initConfig(path)
-		default:
-			return fmt.Errorf("unknown option: %s", option)
-		}
-		args = args[1:]
-	}
+func run() error {
+	flags := flag.NewFlagSet("runny", flag.ContinueOnError)
+	flags.Usage = func() { printHelp() }
 
-	runny, err := readConfig(path)
+	file := flags.StringP("file", "f", ".runny.yaml", "")
+	verbose := flags.BoolP("verbose", "v", false, "")
+	help := flags.BoolP("help", "h", false, "")
+	init := flags.Bool("init", false, "")
+
+	err := flags.Parse(os.Args[1:])
 	if err != nil {
 		return err
 	}
-	runny.verbose = verbose
+
+	if *help {
+		printHelp()
+		return nil
+	}
+
+	if *init {
+		return initConfig(*file)
+	}
+
+	runny, err := readConfig(*file)
+	if err != nil {
+		return err
+	}
+	runny.verbose = *verbose
 
 	// Process runny command
+	args := flags.Args()
 	if len(args) > 0 {
 		name := CommandName(args[0])
 		err := runny.Execute(name, args[1:]...)
@@ -96,7 +95,7 @@ func run(path string) error {
 }
 
 func Run() {
-	err := run(".runny.yaml")
+	err := run()
 	if err != nil {
 		errStr := fmt.Sprintf("%v\n", err)
 		red := color.New(color.FgRed)
