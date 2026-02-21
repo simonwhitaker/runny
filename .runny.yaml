@@ -4,14 +4,14 @@ commands:
     run: |
       go clean ./...
       rm -rf dist
-  install-pre-commit:
+  install-prek:
     internal: true
-    if: "! command -v pre-commit"
-    run: brew install pre-commit
+    if: "! command -v prek"
+    run: brew install prek
   install-pre-commit-hooks:
     needs:
-      - install-pre-commit
-    run: pre-commit install
+      - install-prek
+    run: prek install --overwrite
   install-fish-completions:
     # Homebrew installs these for you, but this is useful if you're installing with `go install .`
     run: ln -s $PWD/completions/runny.fish ~/.config/fish/completions
