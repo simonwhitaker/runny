@@ -1,13 +1,35 @@
 package runny
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"slices"
 	"strings"
 
+	"github.com/invopop/jsonschema"
 	"golang.org/x/term"
 )
+
+func GenerateSchema() (string, error) {
+	schema := jsonschema.Reflect(&Config{})
+	bytes, err := schema.MarshalJSON()
+	if err != nil {
+		return "", err
+	}
+
+	var obj map[string]interface{}
+	if err := json.Unmarshal(bytes, &obj); err != nil {
+		return "", err
+	}
+
+	indented, err := json.MarshalIndent(obj, "", "    ")
+	if err != nil {
+		return "", err
+	}
+
+	return string(indented), nil
+}
 
 type CommandName string
 

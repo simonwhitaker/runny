@@ -53,6 +53,7 @@ func run() error {
 	verbose := flags.BoolP("verbose", "v", false, "Enable verbose mode")
 	help := flags.BoolP("help", "h", false, "Show this help")
 	init := flags.Bool("init", false, "Create a sample .runny.yaml file")
+	schema := flags.Bool("schema", false, "Print the JSON schema for .runny.yaml")
 
 	flags.Usage = func() { printHelp(flags) }
 
@@ -63,6 +64,15 @@ func run() error {
 
 	if *help {
 		printHelp(flags)
+		return nil
+	}
+
+	if *schema {
+		s, err := GenerateSchema()
+		if err != nil {
+			return err
+		}
+		fmt.Println(s)
 		return nil
 	}
 
