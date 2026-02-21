@@ -24,6 +24,7 @@ Create a `.runny.yaml` file:
 shell: /bin/bash
 commands:
   install-uv:
+    internal: true # hidden from default command output
     if: "! command -v uv"
     run: pip install uv
   pip-sync:
@@ -42,20 +43,6 @@ commands:
     run: echo $packagespec >> requirements.in
     then:
       - pip-compile-and-sync
-```
-
-Commands marked `internal: true` are hidden from the command list unless `--verbose` is given. This is useful for helper commands that are only used as dependencies:
-
-```yaml
-commands:
-  install-uv:
-    internal: true
-    if: "! command -v uv"
-    run: pip install uv
-  pip-sync:
-    needs:
-      - install-uv
-    run: uv pip sync requirements.txt
 ```
 
 Then run commands with runny:
