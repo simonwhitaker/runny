@@ -8,6 +8,7 @@ Makefiles are for boomers. The future is Runny.
 * 🪄 Full schema validaton == autocomplete in your favourite code editor
 * 🧱 Build workflows through composition with `needs` and `then`
 * 🏃‍♂️ Run steps conditionally with `if`
+* 🙈 Hide helper commands from the command list with `internal`
 
 ## Installation
 
@@ -41,6 +42,20 @@ commands:
     run: echo $packagespec >> requirements.in
     then:
       - pip-compile-and-sync
+```
+
+Commands marked `internal: true` are hidden from the command list unless `--verbose` is given. This is useful for helper commands that are only used as dependencies:
+
+```yaml
+commands:
+  install-uv:
+    internal: true
+    if: "! command -v uv"
+    run: pip install uv
+  pip-sync:
+    needs:
+      - install-uv
+    run: uv pip sync requirements.txt
 ```
 
 Then run commands with runny:
