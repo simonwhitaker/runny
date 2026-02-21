@@ -3,6 +3,8 @@ package runny
 import (
 	"os"
 	"testing"
+
+	"github.com/spf13/pflag"
 )
 
 func TestPrivateRun(t *testing.T) {
@@ -55,17 +57,21 @@ func TestPrivateRun(t *testing.T) {
 }
 
 func Example_printHelp() {
-	printHelp()
+	flags := pflag.NewFlagSet("runny", pflag.ContinueOnError)
+	flags.StringP("file", "f", ".runny.yaml", "Specify a runny file")
+	flags.BoolP("verbose", "v", false, "Enable verbose mode")
+	flags.BoolP("help", "h", false, "Show this help")
+	flags.Bool("init", false, "Create a sample .runny.yaml file")
+	printHelp(flags)
 	// Output: 🍯 runny -- for running things.
 	//
 	// Usage:
 	//   runny [options] [command]
 	//
 	// Options:
-	//   -f, --file     Specify a runny file (default: .runny.yaml)
-	//   -h, --help     Show this help
-	//   -v, --verbose  Enable verbose mode
-	//   --init         Create a sample .runny.yaml file
-	//
+	//   -f, --file string   Specify a runny file (default ".runny.yaml")
+	//   -h, --help          Show this help
+	//       --init          Create a sample .runny.yaml file
+	//   -v, --verbose       Enable verbose mode
 	// Run without arguments to list commands.
 }

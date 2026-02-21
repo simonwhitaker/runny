@@ -5,10 +5,10 @@ import (
 	"os"
 
 	"github.com/fatih/color"
-	flag "github.com/spf13/pflag"
+	"github.com/spf13/pflag"
 )
 
-func printHelp() {
+func printHelp(flags *pflag.FlagSet) {
 	titleString := color.New(color.FgYellow, color.Bold).Sprintf("🍯 runny")
 	usageString := color.New(color.Bold).Sprintf("runny [options] [command]")
 	fmt.Printf(`%s -- for running things.
@@ -17,13 +17,8 @@ Usage:
   %s
 
 Options:
-  -f, --file     Specify a runny file (default: .runny.yaml)
-  -h, --help     Show this help
-  -v, --verbose  Enable verbose mode
-  --init         Create a sample .runny.yaml file
-
-Run without arguments to list commands.`, titleString, usageString)
-	fmt.Print("\n")
+%sRun without arguments to list commands.
+`, titleString, usageString, flags.FlagUsages())
 }
 
 const sampleConfig = `commands:
@@ -52,13 +47,14 @@ func initConfig(path string) error {
 }
 
 func run() error {
-	flags := flag.NewFlagSet("runny", flag.ContinueOnError)
-	flags.Usage = func() { printHelp() }
+	flags := pflag.NewFlagSet("runny", pflag.ContinueOnError)
 
-	file := flags.StringP("file", "f", ".runny.yaml", "")
-	verbose := flags.BoolP("verbose", "v", false, "")
-	help := flags.BoolP("help", "h", false, "")
-	init := flags.Bool("init", false, "")
+	file := flags.StringP("file", "f", ".runny.yaml", "Specify a runny file")
+	verbose := flags.BoolP("verbose", "v", false, "Enable verbose mode")
+	help := flags.BoolP("help", "h", false, "Show this help")
+	init := flags.Bool("init", false, "Create a sample .runny.yaml file")
+
+	flags.Usage = func() { printHelp(flags) }
 
 	err := flags.Parse(os.Args[1:])
 	if err != nil {
@@ -66,7 +62,7 @@ func run() error {
 	}
 
 	if *help {
-		printHelp()
+		printHelp(flags)
 		return nil
 	}
 
