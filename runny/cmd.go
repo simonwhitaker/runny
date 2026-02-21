@@ -52,7 +52,7 @@ func run() error {
 	file := flags.StringP("file", "f", ".runny.yaml", "Specify a runny file")
 	verbose := flags.BoolP("verbose", "v", false, "Enable verbose mode")
 	help := flags.BoolP("help", "h", false, "Show this help")
-	init := flags.Bool("init", false, "Create a sample .runny.yaml file")
+	init := flags.Bool("init", false, "Create a sample .runny.yaml file (override path with -f)")
 	schema := flags.Bool("schema", false, "Print the JSON schema for .runny.yaml")
 
 	flags.Usage = func() { printHelp(flags) }
