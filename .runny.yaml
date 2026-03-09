@@ -16,10 +16,12 @@ commands:
     # Homebrew installs these for you, but this is useful if you're installing with `go install .`
     run: ln -s $PWD/completions/runny.fish ~/.config/fish/completions
   release:
+    description: Push a git tag to trigger a release. The tag must be in the format vX.Y.Z, e.g. v1.2.3.
     argnames:
       - tag
     run: git tag -am $tag $tag && git push origin refs/tags/$tag
   release-next:
+    description: Automatically determine the next version and push a git tag to trigger a release.
     run: |
       latest_version=$(git tag --list "v*" --sort "-refname" | head -1)
       next_version=$(echo ${latest_version} | awk -F. -v OFS=. '{$NF += 1 ; print}')

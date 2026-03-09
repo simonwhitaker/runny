@@ -33,7 +33,7 @@ func (shell PosixShell) Run(command string, extraArgs []string, echoStdout, verb
 	}
 
 	if verbose {
-		secondaryColor.Printf("Executing %s\n", command)
+		logColor.Printf("Executing %s\n", command)
 	}
 	args := []string{"-c", command}
 

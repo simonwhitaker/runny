@@ -7,6 +7,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/fatih/color"
 	"github.com/invopop/jsonschema"
 	"golang.org/x/term"
 )
@@ -34,6 +35,8 @@ func GenerateSchema() (string, error) {
 type CommandName string
 
 type CommandDef struct {
+	// An optional description shown in command listings
+	Description string `json:"description,omitempty"`
 	// The command to be run
 	Run string `json:"run,omitempty"`
 	// A list of the commands that must be run before this one
@@ -117,12 +120,21 @@ func (c *Config) PrintCommands() {
 
 	for _, name := range names {
 		maxCommandLength := maxLineLength - len(name) - 1
-		var rawCommand = commandStringToSingleLine(commands[name].Run, maxCommandLength)
+		displayText, displayColor := commandDisplay(commands[name])
+		var rawCommand = commandStringToSingleLine(displayText, maxCommandLength)
 
 		fmt.Print(primaryColor.Sprint(name))
 		fmt.Print(separator)
-		fmt.Println(secondaryColor.Sprint(rawCommand))
+		fmt.Println(displayColor.Sprint(rawCommand))
 	}
+}
+
+func commandDisplay(command CommandDef) (string, *color.Color) {
+	description := strings.TrimSpace(command.Description)
+	if description != "" {
+		return description, descriptionColor
+	}
+	return command.Run, runValueColor
 }
 
 func (c *Config) Execute(name CommandName, args ...string) error {
@@ -145,7 +157,7 @@ func (c *Config) Execute(name CommandName, args ...string) error {
 		if err != nil {
 			// Run returns an error if the exit status is not zero. So in this case, this means the test failed.
 			if c.verbose {
-				secondaryColor.Printf("%v: '%v' not true, skipping\n", name, cond)
+				logColor.Printf("%v: '%v' not true, skipping\n", name, cond)
 			}
 			return nil
 		}

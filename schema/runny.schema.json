@@ -9,6 +9,9 @@
                     },
                     "type": "array"
                 },
+                "description": {
+                    "type": "string"
+                },
                 "env": {
                     "items": {
                         "type": "string"

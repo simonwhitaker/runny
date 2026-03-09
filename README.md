@@ -9,6 +9,7 @@ Makefiles are for boomers. The future is Runny.
 * 🧱 Build workflows through composition with `needs` and `then`
 * 🏃‍♂️ Run steps conditionally with `if`
 * 🙈 Hide helper commands from the command list with `internal`
+* 🏷️ Add `description` to show friendly command summaries
 
 ## Installation
 
@@ -28,6 +29,7 @@ commands:
     if: "! command -v uv"
     run: pip install uv
   pip-sync:
+    description: Sync dependencies from requirements.txt
     needs:
       - install-uv
     run: uv pip sync requirements.txt

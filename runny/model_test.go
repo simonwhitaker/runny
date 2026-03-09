@@ -41,8 +41,28 @@ func TestCommandDefGetShell(t *testing.T) {
 	}
 }
 
+func TestCommandDisplayUsesDescriptionWhenPresent(t *testing.T) {
+	displayText, displayColor := commandDisplay(CommandDef{Description: "foo description", Run: "echo foo"})
+	if displayText != "foo description" {
+		t.Fatalf("expected description text, got %q", displayText)
+	}
+	if displayColor != descriptionColor {
+		t.Fatalf("expected descriptionColor for description")
+	}
+}
+
+func TestCommandDisplayFallsBackToRun(t *testing.T) {
+	displayText, displayColor := commandDisplay(CommandDef{Description: "   ", Run: "echo foo"})
+	if displayText != "echo foo" {
+		t.Fatalf("expected run text, got %q", displayText)
+	}
+	if displayColor != runValueColor {
+		t.Fatalf("expected runValueColor for run")
+	}
+}
+
 func ExampleConfig_PrintCommands() {
-	c := Config{Commands: map[CommandName]CommandDef{"foo": {Run: "bar"}}}
+	c := Config{Commands: map[CommandName]CommandDef{"foo": {Description: "Show foo output", Run: "bar"}}}
 	c.PrintCommands()
-	// Output: foo	bar
+	// Output: foo	Show foo output
 }
