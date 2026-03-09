@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Runny — A modern command runner</title>
+  <meta name="description" content="Runny is a modern command runner with simple YAML syntax, workflow composition, and IDE autocomplete. A better alternative to Makefiles.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍯</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&family=DynaPuff:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ── Hero ──────────────────────────────────────── -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-logo">🍯</div>
+      <h1><span>Runny</span></h1>
+      <p class="tagline">Makefiles are for boomers. The future is Runny.</p>
+      <div class="install-box" onclick="copyInstall()" id="install-box">
+        <span class="prompt">$</span>
+        <span>brew install simonwhitaker/tap/runny</span>
+        <span class="copy-icon" id="copy-hint"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span>
+      </div>
+      <div class="hero-links">
+        <a href="https://github.com/simonwhitaker/runny">GitHub</a>
+        <a href="https://github.com/simonwhitaker/runny/releases">Releases</a>
+        <a href="#get-started">Get started</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Pitch ─────────────────────────────────────── -->
+  <section class="pitch">
+    <div class="container">
+      <h2>Your project commands, finally organized</h2>
+      <p>Every project accumulates a pile of shell commands. Build scripts, test runners, deploy steps, dependency wrangling. Runny gives them a home in a clean <code>.runny.yaml</code> file and gets out of your way.</p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>YAML you already know</h3>
+          <p>Syntax inspired by GitHub Actions. If you've written a workflow file, you already know how Runny works.</p>
+        </div>
+        <div class="feature-card">
+          <h3>IDE autocomplete</h3>
+          <p>Full JSON schema means your editor can autocomplete keys, validate structure, and catch typos as you type.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Compose workflows</h3>
+          <p>Chain commands with <code>needs</code> and <code>then</code>. Run steps conditionally with <code>if</code>. No more copy-pasting sequences.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Arguments built in</h3>
+          <p>Pass arguments to commands with <code>argnames</code>. No quoting gymnastics or positional parameter headaches.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Clean command lists</h3>
+          <p>Mark helper commands as <code>internal</code> to keep your command list focused. Add <code>description</code> for quick reference.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Tiny and fast</h3>
+          <p>A single Go binary. No runtime, no dependencies. Installs in seconds, runs instantly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Get started ───────────────────────────────── -->
+  <section id="get-started">
+    <div class="container">
+      <h2 class="code-section">How it works</h2>
+      <div class="workflow-steps">
+        <div class="workflow-step">
+          <div class="step-number">1</div>
+          <h3>Install</h3>
+          <p>One Homebrew command. Also available via <code>go install</code> or GitHub releases.</p>
+        </div>
+        <div class="workflow-step">
+          <div class="step-number">2</div>
+          <h3>Define</h3>
+          <p>Create a <code>.runny.yaml</code> in your project root. Or run <code>runny --init</code> to generate one.</p>
+        </div>
+        <div class="workflow-step">
+          <div class="step-number">3</div>
+          <h3>Run</h3>
+          <p>Type <code>runny &lt;command&gt;</code>. Tab completion works out of the box for bash, zsh, and fish.</p>
+        </div>
+      </div>
+
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+        </div>
+        <pre><span class="prompt-char">$</span> <span class="cmd">runny</span>
+<span class="cmd">build</span> <span class="run-value">go build -o dist/myapp ./...</span>
+<span class="cmd">deploy</span> <span class="desc-value">Deploy to production</span>
+<span class="cmd">lint</span> <span class="run-value">golangci-lint run ./...</span>
+<span class="cmd">test</span> <span class="run-value">go test ./...</span>
+<span class="cmd">test-coverage</span> <span class="run-value">go test -coverprofile=c.out ./...</span>
+
+<span class="prompt-char">$</span> <span class="cmd">runny test</span>
+<span class="output">ok   myapp/api     0.42s
+ok   myapp/core    0.31s
+ok   myapp/web     0.18s</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Examples ──────────────────────────────────── -->
+  <section class="code-section">
+    <div class="container">
+      <h2>See it in action</h2>
+      <p>Real configs for real workflows. Drop one of these into your project and go.</p>
+
+      <div class="example">
+        <h3>Python project</h3>
+        <div class="code-block">
+          <span class="filename">.runny.yaml</span>
+          <pre><code><span class="hl-key">shell</span>: <span class="hl-str">/bin/bash</span>
+<span class="hl-key">commands</span>:
+  <span class="hl-key">install-uv</span>:
+    <span class="hl-key">internal</span>: <span class="hl-bool">true</span>    <span class="hl-comment"># hidden from command list</span>
+    <span class="hl-key">if</span>: <span class="hl-str">"! command -v uv"</span>
+    <span class="hl-key">run</span>: <span class="hl-str">pip install uv</span>
+  <span class="hl-key">pip-sync</span>:
+    <span class="hl-key">description</span>: <span class="hl-str">Sync dependencies from requirements.txt</span>
+    <span class="hl-key">needs</span>:
+      - <span class="hl-str">install-uv</span>
+    <span class="hl-key">run</span>: <span class="hl-str">uv pip sync requirements.txt</span>
+  <span class="hl-key">pip-install</span>:
+    <span class="hl-key">argnames</span>:
+      - <span class="hl-str">packagespec</span>
+    <span class="hl-key">run</span>: <span class="hl-str">echo $packagespec >> requirements.in</span>
+    <span class="hl-key">then</span>:
+      - <span class="hl-str">pip-compile-and-sync</span></code></pre>
+        </div>
+      </div>
+
+      <div class="example">
+        <h3>Go project</h3>
+        <div class="code-block">
+          <span class="filename">.runny.yaml</span>
+          <pre><code><span class="hl-key">commands</span>:
+  <span class="hl-key">clean</span>:
+    <span class="hl-key">run</span>: |
+      <span class="hl-str">go clean ./...</span>
+      <span class="hl-str">rm -rf dist</span>
+  <span class="hl-key">test</span>:
+    <span class="hl-key">run</span>: <span class="hl-str">go test ./...</span>
+  <span class="hl-key">release</span>:
+    <span class="hl-key">needs</span>:
+      - <span class="hl-str">clean</span>
+      - <span class="hl-str">install-goreleaser</span>
+    <span class="hl-key">run</span>: |
+      <span class="hl-str">export GITHUB_TOKEN=$(gh auth token)</span>
+      <span class="hl-str">goreleaser</span></code></pre>
+        </div>
+      </div>
+
+      <div class="example">
+        <h3>Docker Compose</h3>
+        <div class="code-block">
+          <span class="filename">.runny.yaml</span>
+          <pre><code><span class="hl-key">commands</span>:
+  <span class="hl-key">up</span>:
+    <span class="hl-key">run</span>: <span class="hl-str">docker compose up -d</span>
+  <span class="hl-key">down</span>:
+    <span class="hl-key">run</span>: <span class="hl-str">docker compose down</span>
+  <span class="hl-key">logs</span>:
+    <span class="hl-key">argnames</span>:
+      - <span class="hl-str">service</span>
+    <span class="hl-key">run</span>: <span class="hl-str">docker compose logs $service</span>
+  <span class="hl-key">shell</span>:
+    <span class="hl-key">argnames</span>:
+      - <span class="hl-str">service</span>
+    <span class="hl-key">run</span>: <span class="hl-str">docker compose exec $service sh</span></code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ────────────────────────────────────── -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="https://github.com/simonwhitaker/runny">Source</a>
+        <a href="https://github.com/simonwhitaker/runny/releases">Releases</a>
+        <a href="https://github.com/simonwhitaker/runny/issues">Issues</a>
+      </div>
+      <p>Made by <a href="https://github.com/simonwhitaker">Simon Whitaker</a></p>
+    </div>
+  </footer>
+
+  <script>
+    function copyInstall() {
+      navigator.clipboard.writeText('brew install simonwhitaker/tap/runny').then(function() {
+        var hint = document.getElementById('copy-hint');
+        hint.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+        setTimeout(function() {
+          hint.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+        }, 2000);
+      });
+    }
+  </script>
+
+</body>
+</html>
