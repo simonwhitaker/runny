@@ -15,6 +15,9 @@ commands:
   install-fish-completions:
     # Homebrew installs these for you, but this is useful if you're installing with `go install .`
     run: ln -s $PWD/completions/runny.fish ~/.config/fish/completions
+  modernize:
+    description: Run the modernize tool and fix all
+    run: go run golang.org/x/tools/go/analysis/passes/modernize/cmd/modernize@latest -fix ./...
   release:
     description: Push a git tag to trigger a release. The tag must be in the format vX.Y.Z, e.g. v1.2.3.
     argnames:

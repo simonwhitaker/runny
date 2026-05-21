@@ -19,7 +19,7 @@ func GenerateSchema() (string, error) {
 		return "", err
 	}
 
-	var obj map[string]interface{}
+	var obj map[string]any
 	if err := json.Unmarshal(bytes, &obj); err != nil {
 		return "", err
 	}
