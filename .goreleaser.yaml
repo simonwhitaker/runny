@@ -49,7 +49,7 @@ homebrew_casks:
       fish: completions/runny.fish
       zsh: completions/runny.zsh
     hooks:
-      post:
+      pre:
         install_steps: |
           on_macos do
             run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{ .StagedPath }}/runny"]
